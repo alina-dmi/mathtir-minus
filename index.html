@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Математический тир: Отрицательные числа</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0; min-height: 100vh;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(160deg, #3a0ca3, #1e1b4b);
+    color: #fff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 16px; user-select: none; overflow: hidden;
+  }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%; max-width: 420px;
+    font-size: 0.9rem; opacity: 0.9; margin-bottom: 10px;
+    min-height: 1.6rem;
+    gap: 6px;
+  }
+  .topbar > span { white-space: nowrap; }
+  .topbar .rank {
+    color: #7dd3fc;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.3s, transform 0.3s;
+    display: inline-block;
+  }
+  .topbar .rank.pulse {
+    animation: rankPulse 0.5s ease-out;
+  }
+  @keyframes rankPulse {
+    0%   { transform: scale(1);   color: #7dd3fc; text-shadow: none; }
+    50%  { transform: scale(1.2); color: #fff;    text-shadow: 0 0 12px #7dd3fc; }
+    100% { transform: scale(1);   color: #7dd3fc; text-shadow: none; }
+  }
+  .hearts { font-size: 1.1rem; letter-spacing: 2px; }
+
+  .task {
+    font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
+    margin: 6px 0 28px; text-align: center;
+    text-shadow: 0 0 14px rgba(125,211,252,0.25), 0 4px 12px rgba(0,0,0,0.35);
+    transition: color 0.15s, transform 0.15s;
+    min-height: 4rem;
+  }
+  .task.hit { color: #2ecc71; transform: scale(1.06); text-shadow: 0 0 18px rgba(46,204,113,0.5); }
+
+  .answers {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px; width: 100%; max-width: 420px;
+  }
+  .ball {
+    padding: 26px 0; font-size: 1.9rem; font-weight: 600;
+    border: none; border-radius: 18px; cursor: pointer;
+    color: #fff; transition: transform 0.12s;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.25);
+    background: #3b5bdb;
+  }
+  .ball.positive { background: #2a9d8f; }
+  .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.25); }
+  .ball.correct { background: #2ecc71 !important; animation: pop 0.25s ease-out; }
+  .ball.wrong   { background: #555 !important; opacity: 0.45; }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .msg {
+    height: 1.6rem; margin-top: 14px;
+    font-size: 1.1rem; font-weight: 700; text-align: center;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .msg.show { opacity: 1; }
+
+  .actions { margin-top: 16px; text-align: center; }
+  .btn-main {
+    padding: 13px 28px; font-size: 1rem; font-weight: 700;
+    border: none; border-radius: 14px; cursor: pointer;
+    background: #fff; color: #3a0ca3;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    opacity: 0; transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+  .link {
+    display: block; margin: 12px auto 0;
+    font-size: 0.85rem; color: rgba(255,255,255,0.7);
+    background: none; border: none; cursor: pointer;
+    text-decoration: underline; padding: 4px;
+  }
+  .link.secondary {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 6px;
+  }
+
+  #menu {
+    display: flex; flex-direction: column; align-items: center;
+    width: 100%; max-width: 420px;
+  }
+  #menu h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0 0 4px;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  #menu h2.subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 28px;
+    text-align: center;
+    color: #7dd3fc;
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(125, 211, 252, 0.35);
+  }
+
+  .mode-btn {
+    width: 100%;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.25);
+    transition: transform 0.1s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+  .mode-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
+  }
+  .mode-btn .sym {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.9;
+    min-width: 2.2rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mode-btn .sym svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+  .mode-btn .label { flex: 1; }
+  #mode-addsub { background: #e63946; }
+  #mode-muldiv { background: #2bb3a8; }
+  #mode-all    { background: #e8890c; }
+
+  #menu .author {
+    margin: 12px 0 0;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.45);
+    text-align: center;
+    letter-spacing: 0.3px;
+    line-height: 1.4;
+  }
+  #menu .author b {
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+  }
+
+  #game { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 420px; }
+  #menu.hidden { display: none; }
+  #game.visible { display: flex; }
+
+  .confetti {
+    position: fixed; top: -20px; width: 10px; height: 10px;
+    border-radius: 2px; z-index: 15; pointer-events: none;
+    animation: fall linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  @media (max-width: 360px) {
+    .topbar { font-size: 0.8rem; }
+    .hearts { font-size: 0.95rem; letter-spacing: 1px; }
+    .task { font-size: 2.7rem; }
+    .ball { font-size: 1.6rem; padding: 22px 0; }
+    .mode-btn { font-size: 1rem; padding: 16px 16px; }
+    #menu .author { font-size: 0.7rem; }
+  }
+</style>
+</head>
+<body>
+
+  <div id="menu">
+    <h1>🎯 Математический тир</h1>
+    <h2 class="subtitle">🧊 Отрицательные числа</h2>
+    <button class="mode-btn" id="mode-addsub">
+      <span class="sym">+ −</span>
+      <span class="label">Сложение и вычитание</span>
+    </button>
+    <button class="mode-btn" id="mode-muldiv">
+      <span class="sym">× ÷</span>
+      <span class="label">Умножение и деление</span>
+    </button>
+    <button class="mode-btn" id="mode-all">
+      <span class="sym">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="4"/>
+          <circle cx="8.5" cy="8.5" r="1.2" fill="#fff" stroke="none"/>
+          <circle cx="15.5" cy="8.5" r="1.2" fill="#fff" stroke="none"/>
+          <circle cx="12" cy="12" r="1.2" fill="#fff" stroke="none"/>
+          <circle cx="8.5" cy="15.5" r="1.2" fill="#fff" stroke="none"/>
+          <circle cx="15.5" cy="15.5" r="1.2" fill="#fff" stroke="none"/>
+        </svg>
+      </span>
+      <span class="label">Всё вместе</span>
+    </button>
+
+    <p class="author">
+      Автор и создатель<br>
+      <b>Алина Дмитриевна Оленева</b>
+    </p>
+  </div>
+
+  <div id="game">
+    <div class="topbar">
+      <span>Счёт: <b id="score">0</b></span>
+      <span class="hearts" id="hearts">❤️❤️❤️❤️❤️</span>
+      <span class="rank" id="rank">🌱 Новичок</span>
+    </div>
+
+    <div class="task" id="task">…</div>
+    <div class="answers" id="answers"></div>
+    <div class="msg" id="msg"></div>
+
+    <div class="actions">
+      <button class="btn-main" id="continue">▶ Продолжить</button>
+      <button class="link" id="restart">Начать заново</button>
+      <button class="link secondary" id="back">← Сменить режим</button>
+    </div>
+  </div>
+
+<script>
+  const MAX_LIVES = 5;
+  let score = 0, lives = MAX_LIVES, answer = 0, locked = false;
+  let currentMode = 'all';
+  let currentDisplayKey = '';
+  let recentTasks = [];
+  const RECENT_LIMIT = 8;
+  let wrongQueue = [];
+
+  const $ = id => document.getElementById(id);
+  const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+  const pick1 = arr => arr[rnd(0, arr.length - 1)];
+
+  function weightedPick(weights) {
+    const total = weights.reduce((s, w) => s + w, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < weights.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return i;
+    }
+    return weights.length - 1;
+  }
+
+  const RANKS = [
+    { at: 0,   name: 'Новичок',              emoji: '🌱' },
+    { at: 3,   name: 'Считатель',            emoji: '🔢' },
+    { at: 5,   name: 'Умник',                emoji: '💡' },
+    { at: 10,  name: 'Мастер счёта',         emoji: '🏆' },
+    { at: 15,  name: 'Гений чисел',          emoji: '🧠' },
+    { at: 20,  name: 'Профессор',            emoji: '🎓' },
+    { at: 30,  name: 'Король математики',    emoji: '👑' },
+    { at: 40,  name: 'Повелитель цифр',      emoji: '⚡' },
+    { at: 50,  name: 'Суперсчётчик',         emoji: '🚀' },
+    { at: 60,  name: 'Магистр формул',       emoji: '🔮' },
+    { at: 70,  name: 'Легенда чисел',        emoji: '⭐' },
+    { at: 80,  name: 'Алмазный ум',          emoji: '💎' },
+    { at: 90,  name: 'Чемпион',              emoji: '🥇' },
+    { at: 100, name: 'Абсолютный гений',     emoji: '🌟' },
+  ];
+
+  function rankFor(s) {
+    let r = RANKS[0];
+    for (const item of RANKS) if (s >= item.at) r = item;
+    return r;
+  }
+
+  function confetti(n) {
+    const colors = ['#ff6b6b','#4ecdc4','#ffa62b','#9b5de5','#7dd3fc','#a78bfa','#2ecc71'];
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = rnd(0, 100) + 'vw';
+      c.style.background = colors[rnd(0, colors.length - 1)];
+      c.style.animationDuration = (1 + Math.random() * 1.2) + 's';
+      c.style.animationDelay = (Math.random() * 0.3) + 's';
+      c.style.width = c.style.height = rnd(6, 12) + 'px';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 2500);
+    }
+  }
+
+  function updateHearts() {
+    $('hearts').textContent = '❤️'.repeat(lives) + '🖤'.repeat(MAX_LIVES - lives);
+  }
+
+  const fmt = n => (n < 0 ? '−' + Math.abs(n) : '' + n);
+  const wrap = n => (n < 0 ? `(${fmt(n)})` : `${n}`);
+
+  function buildTask() {
+    let ops;
+    if (currentMode === 'addsub') ops = ['+', '−'];
+    else if (currentMode === 'muldiv') ops = ['×', '÷'];
+    else ops = ['+', '−', '×', '÷'];
+
+    const op = pick1(ops);
+    let a, b, ans, display;
+
+    if (op === '+' || op === '−') {
+      const signCombos = [
+        [1, 1],   // a > 0, b > 0
+        [1, -1],  // a > 0, b < 0
+        [-1, 1],  // a < 0, b > 0
+        [-1, -1], // a < 0, b < 0
+      ];
+      const weights = [1, 3, 3, 3];
+      const idx = weightedPick(weights);
+      const [sa, sb] = signCombos[idx];
+      a = sa * rnd(1, 20);
+      b = sb * rnd(1, 20);
+
+      if (op === '+') {
+        ans = a + b;
+        if (b < 0) display = `${fmt(a)} − ${Math.abs(b)} = ?`;
+        else       display = `${fmt(a)} + ${b} = ?`;
+      } else {
+        ans = a - b;
+        if (b < 0) display = `${fmt(a)} + ${Math.abs(b)} = ?`;
+        else       display = `${fmt(a)} − ${b} = ?`;
+      }
+    } else if (op === '×') {
+      const signCombos = [
+        [1, 1], [1, -1], [-1, 1], [-1, -1],
+      ];
+      const [sa, sb] = pick1(signCombos);
+      a = sa * rnd(2, 10);
+      b = sb * rnd(2, 10);
+      ans = a * b;
+      display = `${fmt(a)} × ${wrap(b)} = ?`;
+    } else {
+      const signCombos = [
+        [1, 1], [1, -1], [-1, 1], [-1, -1],
+      ];
+      const [sb, sq] = pick1(signCombos);
+      const bDiv = sb * rnd(2, 10);
+      const q = sq * rnd(2, 10);
+      const aDiv = bDiv * q;
+      ans = q;
+      display = `${fmt(aDiv)} ÷ ${wrap(bDiv)} = ?`;
+    }
+    return { display, answer: ans, key: display, op };
+  }
+
+  function restoreTask(key) {
+    const m = key.match(/^(−?\d+)\s([+−×÷])\s(\(−?\d+\)|−?\d+)\s=/);
+    if (!m) return null;
+    const parseNum = s => parseInt(s.replace(/[()−]/g, ch => ch === '−' ? '-' : ''), 10);
+    const a = parseNum(m[1]);
+    const op = m[2];
+    const b = parseNum(m[3]);
+    let ans;
+    if (op === '+') ans = a + b;
+    else if (op === '−') ans = a - b;
+    else if (op === '×') ans = a * b;
+    else ans = a / b;
+    return { display: key, answer: ans, key, op };
+  }
+
+  function makeTask() {
+    let task = null;
+    if (wrongQueue.length > 0 && Math.random() < 0.4) {
+      const key = wrongQueue[Math.floor(Math.random() * wrongQueue.length)];
+      const restored = restoreTask(key);
+      if (restored) { task = restored; wrongQueue = wrongQueue.filter(k => k !== key); }
+    }
+    if (!task) {
+      let attempts = 0;
+      task = buildTask();
+      while (recentTasks.includes(task.key) && attempts < 30) {
+        task = buildTask(); attempts++;
+      }
+    }
+    recentTasks.push(task.key);
+    if (recentTasks.length > RECENT_LIMIT) recentTasks.shift();
+
+    answer = task.answer;
+    currentDisplayKey = task.key;
+    $('task').textContent = task.display;
+    $('task').classList.remove('hit');
+
+    const opts = new Set([answer]);
+    while (opts.size < 4) {
+      let fake;
+      if (task.op === '×' || task.op === '÷') {
+        fake = answer + pick1([-4,-3,-2,-1,1,2,3,4]);
+      } else {
+        fake = answer + pick1([-5,-4,-3,-2,-1,1,2,3,4,5]);
+      }
+      if (fake !== answer) opts.add(fake);
+    }
+    const arr = [...opts].sort(() => Math.random() - 0.5);
+
+    const box = $('answers');
+    box.innerHTML = '';
+    arr.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'ball' + (v >= 0 ? ' positive' : '');
+      btn.textContent = fmt(v);
+      btn.onclick = () => pick(btn, v);
+      box.appendChild(btn);
+    });
+    locked = false;
+    $('msg').classList.remove('show');
+  }
+
+  function pick(btn, value) {
+    if (locked) return;
+    locked = true;
+    if (value === answer) {
+      const prevRank = rankFor(score);
+      score++;
+      $('score').textContent = score;
+      btn.classList.add('correct');
+      $('task').classList.add('hit');
+      $('msg').textContent = '✅ Верно!';
+      $('msg').style.color = '#2ecc71';
+      $('msg').classList.add('show');
+
+      const newRank = rankFor(score);
+
+      if (newRank.at > prevRank.at) {
+        // Новое звание: салют + пульс звания в строке
+        $('rank').textContent = `${newRank.emoji} ${newRank.name}`;
+        $('rank').classList.remove('pulse');
+        void $('rank').offsetWidth;
+        $('rank').classList.add('pulse');
+        confetti(40);
+      }
+      setTimeout(makeTask, 650);
+    } else {
+      lives--;
+      updateHearts();
+      btn.classList.add('wrong');
+      $('msg').textContent = `❌ Правильно: ${fmt(answer)}`;
+      $('msg').style.color = '#ff6b6b';
+      $('msg').classList.add('show');
+
+      if (currentDisplayKey && !wrongQueue.includes(currentDisplayKey)) {
+        wrongQueue.push(currentDisplayKey);
+        if (wrongQueue.length > 10) wrongQueue.shift();
+      }
+      if (lives <= 0) setTimeout(gameOver, 900);
+      else setTimeout(makeTask, 1200);
+    }
+  }
+
+  function gameOver() {
+    $('task').textContent = '🏁 Жизни кончились!';
+    $('answers').innerHTML = '';
+    const r = rankFor(score);
+    $('msg').textContent = `Счёт: ${score} · ${r.emoji} ${r.name}`;
+    $('msg').style.color = '#fff';
+    $('msg').classList.add('show');
+    $('continue').classList.add('visible');
+  }
+
+  function startGame(mode) {
+    currentMode = mode;
+    score = 0; lives = MAX_LIVES;
+    recentTasks = []; wrongQueue = [];
+    $('score').textContent = 0;
+    updateHearts();
+    $('rank').textContent = `${RANKS[0].emoji} ${RANKS[0].name}`;
+    $('rank').classList.remove('pulse');
+    $('continue').classList.remove('visible');
+    $('menu').classList.add('hidden');
+    $('game').classList.add('visible');
+    makeTask();
+  }
+
+  $('mode-addsub').onclick = () => startGame('addsub');
+  $('mode-muldiv').onclick = () => startGame('muldiv');
+  $('mode-all').onclick    = () => startGame('all');
+
+  $('continue').onclick = () => {
+    lives = MAX_LIVES; updateHearts();
+    $('continue').classList.remove('visible');
+    $('msg').classList.remove('show');
+    makeTask();
+  };
+
+  $('restart').onclick = () => {
+    score = 0; lives = MAX_LIVES;
+    recentTasks = []; wrongQueue = [];
+    $('score').textContent = 0; updateHearts();
+    $('rank').textContent = `${RANKS[0].emoji} ${RANKS[0].name}`;
+    $('rank').classList.remove('pulse');
+    $('continue').classList.remove('visible');
+    $('msg').classList.remove('show');
+    makeTask();
+  };
+
+  $('back').onclick = () => {
+    $('game').classList.remove('visible');
+    $('menu').classList.remove('hidden');
+  };
+</script>
+</body>
+</html>
