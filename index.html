@@ -108,14 +108,20 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .rating-row .sc { font-weight: 800; color: #fcd34d; font-size: 1.1rem; }
 .rating-empty { text-align: center; color: rgba(255,255,255,0.4); font-size: 0.95rem; padding: 32px 0; }
 
-/* ===== МОДАЛКА ===== */
+/* ===== МОДАЛКА ПРОФИЛЯ ===== */
 .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 24px; }
 .modal-overlay.visible { display: flex; }
 .modal-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); text-align: center; }
 .modal-box h3 { margin: 0 0 16px; font-size: 1.3rem; color: #fff; }
 .modal-box input { width: 100%; padding: 16px; font-size: 1.1rem; border-radius: 14px; border: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; outline: none; margin-bottom: 16px; text-align: center; }
 
-/* --- БЛОК СЛОЖНОСТИ --- */
+/* --- ЛИЧНЫЙ РЕЙТИНГ --- */
+.personal-stats { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 14px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
+.p-stat { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+.p-stat span:first-child { color: #94a3b8; font-weight: 500; }
+.p-stat span:last-child { color: #fff; font-weight: 800; font-size: 1.05rem; }
+
+/* --- СЛОЖНОСТЬ --- */
 .difficulty-title { font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-align: left; padding-left: 4px; font-weight: 600; }
 .difficulty-group { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 12px; }
 .diff-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; background: transparent; color: #94a3b8; transition: all 0.2s; }
@@ -244,10 +250,17 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
       <div class="rating-list" id="ratingList"></div>
     </div>
 
-    <!-- Модалка профиля -->
     <div class="modal-overlay" id="nameModal">
       <div class="modal-box">
         <h3>Твой профиль</h3>
+        
+        <!-- ЛИЧНЫЙ РЕЙТИНГ -->
+        <div class="personal-stats">
+          <div class="p-stat"><span>🏆 Лучший счёт</span><span id="pStatBestClassic">0</span></div>
+          <div class="p-stat"><span>⚡ Рекорд в Блице</span><span id="pStatBestTimed">0</span></div>
+          <div class="p-stat"><span>🧠 Решено примеров</span><span id="pStatTotal">0</span></div>
+        </div>
+
         <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
         
         <div class="difficulty-title">Уровень сложности</div>
@@ -292,10 +305,15 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   let timeLeft = 60;
   let timerInterval = null;
 
-  // Профиль
+  // Профиль и настройки
   let playerName = localStorage.getItem('mathTirName') || '';
-  let playerDifficulty = localStorage.getItem('mathTirDifficulty') || 'medium'; // 'easy', 'medium', 'hard'
+  let playerDifficulty = localStorage.getItem('mathTirDifficulty') || 'medium';
   
+  // Личный рейтинг
+  let statBestClassic = parseInt(localStorage.getItem('mathTirBestClassic') || '0', 10);
+  let statBestTimed = parseInt(localStorage.getItem('mathTirBestTimed') || '0', 10);
+  let statTotal = parseInt(localStorage.getItem('mathTirTotal') || '0', 10);
+
   let currentRatingMode = 'classic';
   let currentRatingPeriod = 'all';
 
@@ -376,7 +394,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     const op = pickOp();
     let a, b, ans, display;
 
-    // СЛОЖНОСТЬ (влияет только на + и -)
     let maxAddSub = 30;
     if (playerDifficulty === 'easy') maxAddSub = 10;
     if (playerDifficulty === 'hard') maxAddSub = 100;
@@ -546,6 +563,9 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     if (value === answer) {
       const prevRank = rankFor(score);
       score++;
+      statTotal++; 
+      localStorage.setItem('mathTirTotal', statTotal); // Сохраняем общий счетчик
+      
       $('score').textContent = score;
       btn.classList.add('correct');
       $('task').classList.add('hit');
@@ -692,11 +712,14 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     $('avatarLetter').textContent = playerName ? playerName.charAt(0).toUpperCase() : '?';
   }
 
-  // Логика модалки
   $('editNameBtn').onclick = () => {
     $('nameInput').value = playerName;
     
-    // Устанавливаем активную кнопку сложности
+    // Обновляем статистику в профиле
+    $('pStatBestClassic').textContent = localStorage.getItem('mathTirBestClassic') || '0';
+    $('pStatBestTimed').textContent = localStorage.getItem('mathTirBestTimed') || '0';
+    $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
+
     document.querySelectorAll('.diff-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.diff === playerDifficulty);
     });
@@ -705,7 +728,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     $('nameInput').focus();
   };
 
-  // Выбор сложности
   document.querySelectorAll('.diff-btn').forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
@@ -856,10 +878,13 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 
   updateNameUI();
   if (!playerName) {
-    // Если имя не введено, открываем модалку и активируем среднюю сложность
     document.querySelectorAll('.diff-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.diff === playerDifficulty);
     });
+    $('pStatBestClassic').textContent = localStorage.getItem('mathTirBestClassic') || '0';
+    $('pStatBestTimed').textContent = localStorage.getItem('mathTirBestTimed') || '0';
+    $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
+    
     $('nameModal').classList.add('visible');
     $('nameInput').focus();
   }
