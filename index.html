@@ -9,9 +9,9 @@
 body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #1a1c2e; color: #f1f5f9; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 16px; overflow-x: hidden; position: relative; }
 
 /* ===== ФОН ===== */
-.bg-glow { position: fixed; width: 300px; height: 300px; background: radial-gradient(circle, rgba(165, 180, 252, 0.12) 0%, transparent 70%); top: 20%; left: 50%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
+.bg-glow { position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
 .floating-symbols { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
-.symbol { position: absolute; color: rgba(255, 255, 255, 0.04); font-weight: 800; font-size: 8rem; line-height: 1; animation: floatUp 25s linear infinite; }
+.symbol { position: absolute; color: rgba(255, 255, 255, 0.03); font-weight: 800; font-size: 8rem; line-height: 1; animation: floatUp 25s linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(20vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
 
 #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; }
@@ -19,38 +19,43 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .screen.active { display: flex; }
 
 /* ===== МЕНЮ ===== */
-.menu-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
-.profile-chip { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.08); padding: 6px 14px 6px 6px; border-radius: 30px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255, 255, 255, 0.1); }
-.profile-chip:active { background: rgba(255, 255, 255, 0.15); }
-.avatar { width: 28px; height: 28px; background: #a5b4fc; color: #1a1c2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
+.menu-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.profile-chip { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 6px 14px 6px 6px; border-radius: 30px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.1); }
+.avatar { width: 28px; height: 28px; background: #c7d2fe; color: #1a1c2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
 .profile-name { font-size: 0.9rem; font-weight: 600; color: #e2e8f0; }
-.icon-btn { width: 42px; height: 42px; background: rgba(255, 255, 255, 0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: background 0.2s; color: #fcd34d; }
-.icon-btn:active { background: rgba(255, 255, 255, 0.15); }
+.icon-btn { width: 42px; height: 42px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; color: #fcd34d; }
 .icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
-.header { text-align: center; margin-bottom: 32px; }
-.header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 8px; }
-.header .pill { display: inline-block; background: rgba(165, 180, 252, 0.15); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(165, 180, 252, 0.2); }
-.mode-list { display: flex; flex-direction: column; gap: 12px; }
-.mode-card { display: flex; align-items: center; padding: 16px 20px; border-radius: 20px; border: none; cursor: pointer; text-align: left; transition: transform 0.1s, filter 0.2s; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.mode-card:active { transform: scale(0.98); filter: brightness(0.9); }
-.mode-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 16px; background: rgba(255, 255, 255, 0.2); flex-shrink: 0; }
-.mode-icon svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.mode-text { display: flex; flex-direction: column; flex: 1; }
-.mode-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; }
-.mode-desc { font-size: 0.75rem; opacity: 0.8; font-weight: 500; }
 
-#mode-addsub { background: linear-gradient(135deg, #c084fc, #a855f7); color: #fff; }
-#mode-addsub .mode-desc { color: #fff; opacity: 0.9; }
-#mode-muldiv { background: linear-gradient(135deg, #2dd4bf, #0d9488); color: #042f2e; }
-#mode-muldiv .mode-icon { background: rgba(0,0,0,0.1); }
-#mode-muldiv .mode-icon svg { stroke: #042f2e; }
-#mode-muldiv .mode-desc { color: #042f2e; opacity: 0.8; }
-#mode-all { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #451a03; }
-#mode-all .mode-icon { background: rgba(0,0,0,0.1); }
-#mode-all .mode-icon svg { stroke: #451a03; }
-#mode-all .mode-desc { color: #451a03; opacity: 0.8; }
-#mode-timed { background: linear-gradient(135deg, #fb7185, #e11d48); color: #fff; }
-#mode-timed .mode-desc { color: #fff; opacity: 0.9; }
+.header { text-align: center; margin-bottom: 28px; }
+.header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 8px; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+.header .pill { display: inline-block; background: rgba(165, 180, 252, 0.1); color: #c7d2fe; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(165, 180, 252, 0.2); }
+
+.mode-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+.mode-card { 
+  display: flex; align-items: center; padding: 16px 20px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer; text-align: left; position: relative; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.15); transition: transform 0.1s;
+}
+.mode-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 45%; background: linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 100%); border-radius: 20px 20px 0 0; pointer-events: none; }
+.mode-card:active { transform: scale(0.98); filter: brightness(0.9); }
+
+.mode-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 16px; background: rgba(0,0,0,0.2); flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); z-index: 1; }
+.mode-icon svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.mode-text { display: flex; flex-direction: column; flex: 1; z-index: 1; }
+.mode-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 4px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+.mode-desc { font-size: 0.8rem; opacity: 0.9; font-weight: 500; color: rgba(255,255,255,0.9); }
+
+#mode-addsub { background: linear-gradient(160deg, rgba(167, 139, 250, 0.9) 0%, rgba(139, 92, 246, 0.9) 100%); }
+#mode-muldiv { background: linear-gradient(160deg, rgba(45, 212, 191, 0.9) 0%, rgba(20, 184, 166, 0.9) 100%); }
+#mode-all { background: linear-gradient(160deg, rgba(251, 146, 60, 0.9) 0%, rgba(249, 115, 22, 0.9) 100%); }
+
+.mini-modes-container { display: flex; gap: 12px; justify-content: center; }
+.mini-mode-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; cursor: pointer; background: rgba(255,255,255,0.03); transition: transform 0.1s, background 0.2s; position: relative; overflow: hidden; }
+.mini-mode-btn:active { transform: scale(0.96); background: rgba(255,255,255,0.08); }
+.mini-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; z-index: 1; }
+.mini-icon svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+#mode-timed .mini-icon { background: linear-gradient(135deg, #fcd34d, #f59e0b); box-shadow: 0 0 15px rgba(252, 211, 77, 0.5); }
+#mode-duel .mini-icon { background: linear-gradient(135deg, #e879f9, #d946ef); box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); }
+.mini-text { font-size: 0.8rem; font-weight: 700; color: #e2e8f0; text-align: center; line-height: 1.2; z-index: 1; }
 
 /* ===== ИГРА ===== */
 .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
@@ -108,20 +113,18 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .rating-row .sc { font-weight: 800; color: #fcd34d; font-size: 1.1rem; }
 .rating-empty { text-align: center; color: rgba(255,255,255,0.4); font-size: 0.95rem; padding: 32px 0; }
 
-/* ===== МОДАЛКА ПРОФИЛЯ ===== */
+/* ===== МОДАЛКА ===== */
 .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 24px; }
 .modal-overlay.visible { display: flex; }
 .modal-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); text-align: center; }
 .modal-box h3 { margin: 0 0 16px; font-size: 1.3rem; color: #fff; }
 .modal-box input { width: 100%; padding: 16px; font-size: 1.1rem; border-radius: 14px; border: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; outline: none; margin-bottom: 16px; text-align: center; }
 
-/* --- ЛИЧНЫЙ РЕЙТИНГ --- */
 .personal-stats { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 14px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
 .p-stat { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
 .p-stat span:first-child { color: #94a3b8; font-weight: 500; }
 .p-stat span:last-child { color: #fff; font-weight: 800; font-size: 1.05rem; }
 
-/* --- СЛОЖНОСТЬ --- */
 .difficulty-title { font-size: 0.8rem; color: #94a3b8; margin-bottom: 8px; text-align: left; padding-left: 4px; font-weight: 600; }
 .difficulty-group { display: flex; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 4px; border-radius: 12px; }
 .diff-btn { flex: 1; padding: 8px; border: none; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; background: transparent; color: #94a3b8; transition: all 0.2s; }
@@ -131,6 +134,38 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .modal-box .save:active { transform: translateY(2px); box-shadow: 0 2px 0 #059669; }
 .confetti { position: fixed; top: -20px; width: 10px; height: 10px; border-radius: 2px; z-index: 15; pointer-events: none; animation: fall linear forwards; }
 @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+/* ===== ЭКРАН ДУЭЛИ ===== */
+#screen-duel { position: fixed; inset: 0; background: #1a1c2e; z-index: 50; display: none; overflow: hidden; flex-direction: row; }
+#screen-duel.active { display: flex; }
+.duel-side { flex: 1; display: flex; flex-direction: column; padding: 20px; position: relative; }
+.duel-side:first-child { border-right: 2px dashed rgba(255, 255, 255, 0.1); }
+.duel-header { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 12px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.duel-name { font-size: 1.2rem; font-weight: 800; color: #a5b4fc; }
+.duel-score { font-size: 1.6rem; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+.duel-tasks { display: flex; flex-direction: column; gap: 20px; flex: 1; justify-content: center; }
+.duel-task { background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid rgba(255,255,255,0.15); border-radius: 24px; padding: 20px; text-align: center; font-size: 3rem; font-weight: 800; box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.duel-answers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+.duel-ball { padding: 20px 0; font-size: 1.8rem; font-weight: 800; border: none; border-radius: 16px; cursor: pointer; color: #fff; background: linear-gradient(180deg, #475569 0%, #1e293b 100%); border: 1px solid #64748b; box-shadow: inset 0 2px 0 rgba(255,255,255,0.1), 0 6px 0 rgba(0,0,0,0.3); transition: transform 0.1s; }
+.duel-ball:active { transform: translateY(6px); box-shadow: inset 0 2px 0 rgba(255,255,255,0.1), 0 0 0 rgba(0,0,0,0.3); }
+.duel-ball.correct { background: linear-gradient(180deg, #34d399 0%, #059669 100%) !important; }
+.duel-ball.wrong { background: linear-gradient(180deg, #f87171 0%, #b91c1c 100%) !important; }
+.duel-timer { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); font-size: 2rem; font-weight: 800; color: #fcd34d; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
+
+/* Окно результатов дуэли */
+.result-popup { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; }
+.result-popup.visible { display: flex; }
+.result-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+.result-box h2 { font-size: 1.8rem; margin-bottom: 8px; color: #fcd34d; }
+.result-box p { font-size: 1.2rem; color: #94a3b8; margin-bottom: 20px; }
+.result-score { font-size: 3rem; font-weight: 800; color: #fff; margin-bottom: 24px; letter-spacing: 2px;}
+.result-btn { width: 100%; padding: 16px; font-size: 1.1rem; font-weight: 800; border: none; border-radius: 16px; background: #10b981; color: #fff; box-shadow: 0 4px 0 #059669; cursor: pointer; transition: 0.1s; margin-bottom: 12px; }
+.result-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #059669; }
+
+@media (max-width: 800px) {
+  .duel-task { font-size: 2rem; }
+  .duel-ball { font-size: 1.4rem; padding: 15px 0; }
+}
 </style>
 </head>
 <body>
@@ -182,12 +217,16 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
             <span class="mode-desc">Полный микс из всех заданий</span>
           </div>
         </button>
-        <button class="mode-card" id="mode-timed">
-          <div class="mode-icon"><svg><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-          <div class="mode-text">
-            <span class="mode-title">Блиц-турнир</span>
-            <span class="mode-desc">60 секунд на максимальный счёт</span>
-          </div>
+      </div>
+
+      <div class="mini-modes-container">
+        <button class="mini-mode-btn" id="mode-timed">
+          <div class="mini-icon"><svg><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="mini-text">Блиц-турнир</div>
+        </button>
+        <button class="mini-mode-btn" id="mode-duel">
+          <div class="mini-icon"><svg><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div>
+          <div class="mini-text">Гонка на двоих</div>
         </button>
       </div>
     </div>
@@ -235,6 +274,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
         <div class="rating-tabs">
           <button class="rating-tab active" id="tabClassic">Общий</button>
           <button class="rating-tab" id="tabTimed">Блиц</button>
+          <button class="rating-tab" id="tabDuel">Дуэли</button>
         </div>
       </div>
 
@@ -254,7 +294,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
       <div class="modal-box">
         <h3>Твой профиль</h3>
         
-        <!-- ЛИЧНЫЙ РЕЙТИНГ -->
         <div class="personal-stats">
           <div class="p-stat"><span>🏆 Лучший счёт</span><span id="pStatBestClassic">0</span></div>
           <div class="p-stat"><span>⚡ Рекорд в Блице</span><span id="pStatBestTimed">0</span></div>
@@ -275,6 +314,41 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     </div>
   </div>
 
+  <!-- ЭКРАН ДУЭЛИ (Поверх всего) -->
+  <div id="screen-duel">
+    <div class="duel-timer" id="duelTimer">60</div>
+    <div class="duel-side">
+      <div class="duel-header">
+        <div class="duel-name" id="duelName1">Игрок 1</div>
+        <div class="duel-score" id="duelScore1">0</div>
+      </div>
+      <div class="duel-tasks">
+        <div class="duel-task" id="duelTask1">…</div>
+        <div class="duel-answers" id="duelAnswers1"></div>
+      </div>
+    </div>
+    <div class="duel-side">
+      <div class="duel-header">
+        <div class="duel-name" id="duelName2">Игрок 2</div>
+        <div class="duel-score" id="duelScore2">0</div>
+      </div>
+      <div class="duel-tasks">
+        <div class="duel-task" id="duelTask2">…</div>
+        <div class="duel-answers" id="duelAnswers2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Окно результатов дуэли -->
+  <div class="result-popup" id="duelResultPopup">
+    <div class="result-box">
+      <h2 id="duelResultTitle">🏁 Время вышло!</h2>
+      <p id="duelResultSubtitle">Победила дружба!</p>
+      <div class="result-score" id="duelResultScore">0 : 0</div>
+      <button class="result-btn" id="saveDuelBtn">Сохранить в Рейтинг Дуэлей</button>
+      <button class="result-btn" id="closeDuelBtn" style="background: transparent; box-shadow: none; border: 2px solid #64748b; color: #cbd5e1;">В главное меню</button>
+    </div>
+  </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, push, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -305,17 +379,22 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   let timeLeft = 60;
   let timerInterval = null;
 
-  // Профиль и настройки
   let playerName = localStorage.getItem('mathTirName') || '';
   let playerDifficulty = localStorage.getItem('mathTirDifficulty') || 'medium';
   
-  // Личный рейтинг
   let statBestClassic = parseInt(localStorage.getItem('mathTirBestClassic') || '0', 10);
   let statBestTimed = parseInt(localStorage.getItem('mathTirBestTimed') || '0', 10);
   let statTotal = parseInt(localStorage.getItem('mathTirTotal') || '0', 10);
 
   let currentRatingMode = 'classic';
   let currentRatingPeriod = 'all';
+
+  // Переменные для дуэли
+  let duelActive = false;
+  let duelScore1 = 0, duelScore2 = 0;
+  let duelTimeLeft = 60;
+  let duelTimerInterval = null;
+  let duelTask1 = null, duelTask2 = null;
 
   const $ = id => document.getElementById(id);
   const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -564,7 +643,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
       const prevRank = rankFor(score);
       score++;
       statTotal++; 
-      localStorage.setItem('mathTirTotal', statTotal); // Сохраняем общий счетчик
+      localStorage.setItem('mathTirTotal', statTotal);
       
       $('score').textContent = score;
       btn.classList.add('correct');
@@ -612,10 +691,11 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     }
   }
 
-  function saveScore(mode, finalScore) {
-    if (!playerName) return;
+  function saveScore(mode, finalScore, customName) {
+    const nameToSave = customName || playerName;
+    if (!nameToSave) return;
     push(ref(db, `scores/${mode}`), {
-      name: playerName,
+      name: nameToSave,
       score: finalScore,
       timestamp: Date.now()
     }).catch(e => console.error(e));
@@ -712,10 +792,10 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     $('avatarLetter').textContent = playerName ? playerName.charAt(0).toUpperCase() : '?';
   }
 
+  // ===== МОДАЛКА ПРОФИЛЯ =====
   $('editNameBtn').onclick = () => {
     $('nameInput').value = playerName;
     
-    // Обновляем статистику в профиле
     $('pStatBestClassic').textContent = localStorage.getItem('mathTirBestClassic') || '0';
     $('pStatBestTimed').textContent = localStorage.getItem('mathTirBestTimed') || '0';
     $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
@@ -757,6 +837,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     if (e.key === 'Enter') $('saveName').click();
   });
 
+  // ===== ОСНОВНАЯ ИГРА =====
   function startGame(mode) {
     currentMode = mode;
     isTimedMode = (mode === 'timed');
@@ -811,10 +892,140 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   $('mode-all').onclick    = () => startGame('all');
   $('mode-timed').onclick  = () => startGame('timed');
 
+  // ===== ДУЭЛЬ (ГОНКА НА ДВОИХ) =====
+  
+  function createDuelOptions(container, correctAnswer, task, onPick) {
+    container.innerHTML = '';
+    const distractors = makeDistractors(task);
+    for (let i = distractors.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [distractors[i], distractors[j]] = [distractors[j], distractors[i]];
+    }
+    const opts = new Set([correctAnswer]);
+    for (const d of distractors) {
+      if (opts.size >= 4) break;
+      opts.add(d);
+    }
+    let guard = 0;
+    while (opts.size < 4 && guard < 50) {
+      guard++;
+      opts.add(correctAnswer + rnd(-20, 20));
+    }
+    const arr = [...opts].sort(() => Math.random() - 0.5);
+
+    arr.forEach(v => {
+      const btn = document.createElement('button');
+      btn.className = 'duel-ball';
+      btn.textContent = fmt(v);
+      btn.onclick = () => onPick(btn, v);
+      container.appendChild(btn);
+    });
+  }
+
+  function nextDuelTask(player) {
+    const task = buildTask();
+    if (player === 1) {
+      duelTask1 = task;
+      $('duelTask1').textContent = task.display;
+      createDuelOptions($('duelAnswers1'), task.answer, task, (btn, val) => {
+        if (val === task.answer) {
+          btn.classList.add('correct');
+          duelScore1++;
+          $('duelScore1').textContent = duelScore1;
+          setTimeout(() => nextDuelTask(1), 150);
+        } else {
+          btn.classList.add('wrong');
+          setTimeout(() => {
+            nextDuelTask(1);
+          }, 800);
+        }
+      });
+    } else {
+      duelTask2 = task;
+      $('duelTask2').textContent = task.display;
+      createDuelOptions($('duelAnswers2'), task.answer, task, (btn, val) => {
+        if (val === task.answer) {
+          btn.classList.add('correct');
+          duelScore2++;
+          $('duelScore2').textContent = duelScore2;
+          setTimeout(() => nextDuelTask(2), 150);
+        } else {
+          btn.classList.add('wrong');
+          setTimeout(() => {
+            nextDuelTask(2);
+          }, 800);
+        }
+      });
+    }
+  }
+
+  $('mode-duel').onclick = () => {
+    duelActive = true;
+    duelScore1 = 0; duelScore2 = 0; duelTimeLeft = 60;
+    $('duelScore1').textContent = '0';
+    $('duelScore2').textContent = '0';
+    $('duelTimer').textContent = '60';
+    $('duelName1').textContent = playerName ? `${playerName}` : 'Игрок 1';
+    $('duelName2').textContent = 'Игрок 2';
+
+    $('screen-duel').classList.add('active');
+    $('duelResultPopup').classList.remove('visible');
+
+    nextDuelTask(1);
+    nextDuelTask(2);
+
+    if (duelTimerInterval) clearInterval(duelTimerInterval);
+    duelTimerInterval = setInterval(() => {
+      duelTimeLeft--;
+      $('duelTimer').textContent = duelTimeLeft;
+      if (duelTimeLeft <= 0) {
+        clearInterval(duelTimerInterval);
+        endDuel();
+      }
+    }, 1000);
+  };
+
+  function endDuel() {
+    duelActive = false;
+    const totalScore = duelScore1 + duelScore2;
+    const pairName = playerName ? `${playerName} и Друг` : 'Команда';
+
+    $('duelResultScore').textContent = `${duelScore1} : ${duelScore2}`;
+    if (duelScore1 > duelScore2) {
+      $('duelResultTitle').textContent = '🏆 Победил Игрок 1!';
+      $('duelResultSubtitle').textContent = playerName ? `${playerName} — молодец!` : 'Отличная игра!';
+    } else if (duelScore2 > duelScore1) {
+      $('duelResultTitle').textContent = '🏆 Победил Игрок 2!';
+      $('duelResultSubtitle').textContent = 'Отличная игра!';
+    } else {
+      $('duelResultTitle').textContent = '🤝 Ничья!';
+      $('duelResultSubtitle').textContent = 'Победила дружба!';
+    }
+
+    $('saveDuelBtn').onclick = () => {
+      const finalPairName = prompt('Как вас зовут? (Например: Алина и Миша)', pairName);
+      if (finalPairName) {
+        saveScore('duel', totalScore, finalPairName);
+        $('saveDuelBtn').textContent = 'Сохранено!';
+        $('saveDuelBtn').style.background = '#475569';
+        $('saveDuelBtn').style.boxShadow = 'none';
+      }
+    };
+
+    $('duelResultPopup').classList.add('visible');
+  }
+
+  $('closeDuelBtn').onclick = () => {
+    $('screen-duel').classList.remove('active');
+    $('duelResultPopup').classList.remove('visible');
+  };
+
+  // ===== РЕЙТИНГ =====
   $('openRatingBtn').onclick = () => {
     showScreen('screen-rating');
     $('tabClassic').classList.add('active');
     $('tabTimed').classList.remove('active');
+    $('tabDuel').classList.remove('active');
     $('periodAll').classList.add('active');
     $('periodMonth').classList.remove('active');
     $('periodWeek').classList.remove('active');
@@ -828,6 +1039,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   $('tabClassic').onclick = () => {
     $('tabClassic').classList.add('active');
     $('tabTimed').classList.remove('active');
+    $('tabDuel').classList.remove('active');
     currentRatingMode = 'classic';
     loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
   };
@@ -835,7 +1047,16 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   $('tabTimed').onclick = () => {
     $('tabTimed').classList.add('active');
     $('tabClassic').classList.remove('active');
+    $('tabDuel').classList.remove('active');
     currentRatingMode = 'timed';
+    loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
+  };
+
+  $('tabDuel').onclick = () => {
+    $('tabDuel').classList.add('active');
+    $('tabClassic').classList.remove('active');
+    $('tabTimed').classList.remove('active');
+    currentRatingMode = 'duel';
     loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
   };
 
