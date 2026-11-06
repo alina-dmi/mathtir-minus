@@ -7,10 +7,27 @@
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
 body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #1a1c2e; color: #f1f5f9; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 16px; overflow-x: hidden; position: relative; }
-.bg-glow { position: fixed; width: 300px; height: 300px; background: radial-gradient(circle, rgba(165, 180, 252, 0.15) 0%, transparent 70%); top: 20%; left: 50%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
+
+/* ===== ОБНОВЛЕННЫЙ ФОН ===== */
+.bg-glow { position: fixed; width: 300px; height: 300px; background: radial-gradient(circle, rgba(165, 180, 252, 0.12) 0%, transparent 70%); top: 20%; left: 50%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
 .floating-symbols { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
-.symbol { position: absolute; color: rgba(255, 255, 255, 0.03); font-weight: 800; font-size: 6rem; animation: floatUp 20s linear infinite; }
-@keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+
+.symbol { 
+  position: absolute; 
+  color: rgba(255, 255, 255, 0.04); 
+  font-weight: 800; 
+  font-size: 8rem; 
+  line-height: 1;
+  animation: floatUp 25s linear infinite; 
+}
+@keyframes floatUp { 
+  0% { transform: translateY(20vh) rotate(0deg); opacity: 0; } 
+  10% { opacity: 1; } 
+  90% { opacity: 1; } 
+  100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } 
+}
+/* ============================= */
+
 #app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; }
 .screen { display: none; flex-direction: column; width: 100%; }
 .screen.active { display: flex; }
@@ -33,16 +50,21 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .mode-text { display: flex; flex-direction: column; flex: 1; }
 .mode-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; }
 .mode-desc { font-size: 0.75rem; opacity: 0.8; font-weight: 500; }
-#mode-addsub { background: linear-gradient(135deg, #c084fc, #a855f7); }
+
+/* ИСПРАВЛЕННЫЕ ЦВЕТА КАРТОЧЕК */
+#mode-addsub { background: linear-gradient(135deg, #c084fc, #a855f7); color: #fff; }
+#mode-addsub .mode-desc { color: #fff; opacity: 0.9; }
 #mode-muldiv { background: linear-gradient(135deg, #2dd4bf, #0d9488); color: #042f2e; }
 #mode-muldiv .mode-icon { background: rgba(0,0,0,0.1); }
 #mode-muldiv .mode-icon svg { stroke: #042f2e; }
-#mode-muldiv .mode-desc { color: #042f2e; opacity: 0.7; }
+#mode-muldiv .mode-desc { color: #042f2e; opacity: 0.8; }
 #mode-all { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #451a03; }
 #mode-all .mode-icon { background: rgba(0,0,0,0.1); }
 #mode-all .mode-icon svg { stroke: #451a03; }
-#mode-all .mode-desc { color: #451a03; opacity: 0.7; }
-#mode-timed { background: linear-gradient(135deg, #fb7185, #e11d48); }
+#mode-all .mode-desc { color: #451a03; opacity: 0.8; }
+#mode-timed { background: linear-gradient(135deg, #fb7185, #e11d48); color: #fff; }
+#mode-timed .mode-desc { color: #fff; opacity: 0.9; }
+
 .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 10px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
 .game-topbar .stat { display: flex; flex-direction: column; align-items: center; }
 .game-topbar .stat-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -103,11 +125,15 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 <body>
 
   <div class="bg-glow"></div>
+  
+  <!-- Обновленный фон: символы распределены по всей высоте -->
   <div class="floating-symbols">
-    <div class="symbol" style="left: 10%; animation-delay: 0s;">+</div>
-    <div class="symbol" style="left: 80%; animation-delay: 5s;">−</div>
-    <div class="symbol" style="left: 30%; animation-delay: 12s;">×</div>
-    <div class="symbol" style="left: 60%; animation-delay: 18s;">÷</div>
+    <div class="symbol" style="left: 5%; animation-delay: 0s;">+</div>
+    <div class="symbol" style="left: 80%; animation-delay: 6s;">−</div>
+    <div class="symbol" style="left: 25%; animation-delay: 14s;">×</div>
+    <div class="symbol" style="left: 70%; animation-delay: 3s;">÷</div>
+    <div class="symbol" style="left: 45%; animation-delay: 20s;">+</div>
+    <div class="symbol" style="left: 15%; animation-delay: 9s;">÷</div>
   </div>
 
   <div id="app">
