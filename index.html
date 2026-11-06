@@ -713,11 +713,14 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
         confetti(40);
       }
       
-      const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
-      if (score > parseInt(localStorage.getItem(recordKey) || '0', 10)) {
-        $('saveRecordBtn').classList.add('show');
-        $('saveRecordBtn').classList.remove('saved');
-        $('saveRecordBtn').textContent = 'Сохранить рекорд';
+      // Кнопка сохранения ТОЛЬКО для обычных режимов
+      if (!isTimedMode) {
+        const recordKey = 'mathTirBestClassic';
+        if (score > parseInt(localStorage.getItem(recordKey) || '0', 10)) {
+          $('saveRecordBtn').classList.add('show');
+          $('saveRecordBtn').classList.remove('saved');
+          $('saveRecordBtn').textContent = 'Сохранить рекорд';
+        }
       }
       
       setTimeout(makeTask, 300);
@@ -945,9 +948,9 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 
   $('saveRecordBtn').onclick = () => {
     if (score === 0 || !playerName) return;
-    const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
+    const recordKey = 'mathTirBestClassic'; // Только для классики
     localStorage.setItem(recordKey, score);
-    saveScore(isTimedMode ? 'timed' : 'classic', score);
+    saveScore('classic', score);
     $('saveRecordBtn').textContent = 'Сохранено!';
     $('saveRecordBtn').classList.add('saved');
     $('saveRecordBtn').classList.remove('show');
@@ -1020,7 +1023,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     }
   }
 
-  // Нажатие на кнопку "Гонка на двоих" в меню
   $('mode-duel').onclick = () => {
     $('duelInput1').value = '';
     $('duelInput2').value = '';
@@ -1028,7 +1030,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     setTimeout(() => $('duelInput1').focus(), 100);
   };
 
-  // Запуск дуэли после ввода имен
   function startDuelGame() {
     duelPlayerName1 = $('duelInput1').value.trim() || 'Игрок 1';
     duelPlayerName2 = $('duelInput2').value.trim() || 'Игрок 2';
@@ -1063,7 +1064,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   $('startDuelBtn').onclick = startDuelGame;
   $('skipDuelBtn').onclick = startDuelGame;
 
-  // Ввод по Enter
   $('duelInput2').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') startDuelGame();
   });
