@@ -175,8 +175,9 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
 /* ===== ЭКРАН ДУЭЛИ ===== */
-#screen-duel { position: fixed; inset: 0; background: #1a1c2e; z-index: 50; display: none; overflow: hidden; flex-direction: row; }
+#screen-duel { position: fixed; inset: 0; background: #1a1c2e; z-index: 50; display: none; overflow: hidden; flex-direction: column; }
 #screen-duel.active { display: flex; }
+.duel-play-area { display: flex; flex: 1; flex-direction: row; overflow: hidden; }
 .duel-side { flex: 1; display: flex; flex-direction: column; padding: 15px; position: relative; }
 .duel-side:first-child { border-right: 2px dashed rgba(255, 255, 255, 0.1); }
 .duel-header { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
@@ -209,35 +210,17 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .duel-ball.correct { background: linear-gradient(180deg, #34d399 0%, #059669 100%) !important; }
 .duel-ball.wrong { background: linear-gradient(180deg, #f87171 0%, #b91c1c 100%) !important; }
 
-.duel-timer { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 1.5rem; font-weight: 800; color: #fcd34d; z-index: 10; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
+.duel-timer { text-align: center; font-size: 1.5rem; font-weight: 800; color: #fcd34d; padding: 10px; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
 
-/* Кнопка выхода из дуэли */
-.duel-exit-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: #fff;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 20;
-  font-size: 1.2rem;
-}
-.duel-exit-btn:active { background: rgba(255,255,255,0.2); }
+/* Нижняя панель дуэли */
+.duel-footer { display: flex; justify-content: center; padding: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
 
 @media (max-width: 800px) {
   .duel-name { font-size: 0.85rem; }
   .duel-score { font-size: 1.2rem; }
   .duel-header { padding: 8px 10px; margin-bottom: 10px; }
   .duel-side { padding: 10px; }
-  .duel-timer { font-size: 1.2rem; }
-  .duel-exit-btn { top: 10px; right: 10px; width: 30px; height: 30px; }
+  .duel-timer { font-size: 1.2rem; padding: 5px; }
 }
 
 /* Окно результатов дуэли */
@@ -423,27 +406,31 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   </div>
 
   <div id="screen-duel">
-    <button class="duel-exit-btn" id="exitDuelBtn">✕</button>
     <div class="duel-timer" id="duelTimer">60</div>
-    <div class="duel-side">
-      <div class="duel-header">
-        <div class="duel-name" id="duelName1">Игрок 1</div>
-        <div class="duel-score" id="duelScore1">0</div>
+    <div class="duel-play-area">
+      <div class="duel-side">
+        <div class="duel-header">
+          <div class="duel-name" id="duelName1">Игрок 1</div>
+          <div class="duel-score" id="duelScore1">0</div>
+        </div>
+        <div class="duel-tasks">
+          <div class="duel-task" id="duelTask1">…</div>
+          <div class="duel-answers" id="duelAnswers1"></div>
+        </div>
       </div>
-      <div class="duel-tasks">
-        <div class="duel-task" id="duelTask1">…</div>
-        <div class="duel-answers" id="duelAnswers1"></div>
+      <div class="duel-side">
+        <div class="duel-header">
+          <div class="duel-name" id="duelName2">Игрок 2</div>
+          <div class="duel-score" id="duelScore2">0</div>
+        </div>
+        <div class="duel-tasks">
+          <div class="duel-task" id="duelTask2">…</div>
+          <div class="duel-answers" id="duelAnswers2"></div>
+        </div>
       </div>
     </div>
-    <div class="duel-side">
-      <div class="duel-header">
-        <div class="duel-name" id="duelName2">Игрок 2</div>
-        <div class="duel-score" id="duelScore2">0</div>
-      </div>
-      <div class="duel-tasks">
-        <div class="duel-task" id="duelTask2">…</div>
-        <div class="duel-answers" id="duelAnswers2"></div>
-      </div>
+    <div class="duel-footer">
+      <button class="link" id="exitDuelBtn" style="color: rgba(255,255,255,0.4); font-size: 0.9rem;">← Покинуть гонку</button>
     </div>
   </div>
 
@@ -1152,7 +1139,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     $('duelResultPopup').classList.remove('visible');
   };
 
-  // Кнопка выхода из дуэли (крестик)
+  // Кнопка выхода из дуэли (внизу)
   $('exitDuelBtn').onclick = () => {
     if (confirm('Вы уверены, что хотите выйти из гонки?')) {
       clearInterval(duelTimerInterval);
