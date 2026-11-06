@@ -16,7 +16,6 @@
     user-select: none; overflow: hidden;
   }
 
-  /* ===== Верхняя строка ===== */
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: nowrap;
@@ -37,9 +36,7 @@
     transition: transform 0.3s;
     display: inline-block;
   }
-  .topbar .rank.pulse {
-    animation: rankPulse 0.5s ease-out;
-  }
+  .topbar .rank.pulse { animation: rankPulse 0.5s ease-out; }
   @keyframes rankPulse {
     0%   { transform: scale(1); }
     50%  { transform: scale(1.2); }
@@ -47,7 +44,6 @@
   }
   .hearts { font-size: 1.1rem; letter-spacing: 2px; }
 
-  /* ===== Пример ===== */
   .task {
     font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
     margin: 10px 0 30px; text-align: center;
@@ -57,7 +53,6 @@
   }
   .task.hit { color: #2ecc71; transform: scale(1.06); }
 
-  /* ===== Ответы ===== */
   .answers {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 16px; width: 100%; max-width: 420px;
@@ -67,9 +62,9 @@
     border: none; border-radius: 18px; cursor: pointer;
     color: #fff; transition: transform 0.12s, background 0.15s, border 0.15s;
     box-shadow: 0 5px 0 rgba(0,0,0,0.3);
-    background: #3d5a99; /* серо-синий — отрицательные */
+    background: #3d5a99;
   }
-  .ball.positive { background: #4a9d8e; } /* мятный — положительные */
+  .ball.positive { background: #4a9d8e; }
   .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
   .ball.correct { background: #2ecc71 !important; animation: pop 0.25s ease-out; }
   .ball.wrong {
@@ -88,7 +83,6 @@
     100% { transform: scale(1); }
   }
 
-  /* ===== Сообщение ===== */
   .msg {
     height: 1.6rem; margin-top: 16px;
     font-size: 1.1rem; font-weight: 700; text-align: center;
@@ -96,7 +90,6 @@
   }
   .msg.show { opacity: 1; }
 
-  /* ===== Кнопки ===== */
   .actions { margin-top: 18px; text-align: center; }
   .btn-main {
     padding: 13px 28px; font-size: 1rem; font-weight: 700;
@@ -121,7 +114,6 @@
     margin-top: 6px;
   }
 
-  /* ===== Меню ===== */
   #menu {
     display: flex; flex-direction: column; align-items: center;
     width: 100%; max-width: 420px;
@@ -236,8 +228,8 @@
       <span class="label">Сложение и вычитание</span>
     </button>
     <button class="mode-btn" id="mode-muldiv">
-      <span class="sym">× ÷</span>
-      <span class="label">Умножение и деление</span>
+      <span class="sym">× ÷ ^</span>
+      <span class="label">Умножение, деление и степень</span>
     </button>
     <button class="mode-btn" id="mode-all">
       <span class="sym">
@@ -283,6 +275,7 @@
   let score = 0, lives = MAX_LIVES, answer = 0, locked = false;
   let currentMode = 'all';
   let currentDisplayKey = '';
+  let currentOp = '';
   let recentTasks = [];
   const RECENT_LIMIT = 8;
   let wrongQueue = [];
@@ -345,28 +338,40 @@
 
   const fmt = n => (n < 0 ? '−' + Math.abs(n) : '' + n);
   const wrap = n => (n < 0 ? `(${fmt(n)})` : `${n}`);
+  const SUP = { 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸' };
+  const EXP = { '³': 3, '⁴': 4, '⁵': 5, '⁶': 6, '⁷': 7, '⁸': 8 };
+
+  // ===== Выбор операции с весами =====
+  function pickOp() {
+    if (currentMode === 'addsub') {
+      return pick1(['+', '−']);
+    }
+    if (currentMode === 'muldiv') {
+      const ops = ['×', '÷', '^'];
+      const w = [2, 2, 1];
+      return ops[weightedPick(w)];
+    }
+    const ops = ['+', '−', '×', '÷', '^'];
+    const w = [1, 1, 2, 2, 1];
+    return ops[weightedPick(w)];
+  }
 
   function buildTask() {
-    let ops;
-    if (currentMode === 'addsub') ops = ['+', '−'];
-    else if (currentMode === 'muldiv') ops = ['×', '÷'];
-    else ops = ['+', '−', '×', '÷'];
-
-    const op = pick1(ops);
+    const op = pickOp();
     let a, b, ans, display;
 
     if (op === '+' || op === '−') {
       const signCombos = [
-        [1, 1],   // a > 0, b > 0
-        [1, -1],  // a > 0, b < 0
-        [-1, 1],  // a < 0, b > 0
-        [-1, -1], // a < 0, b < 0
+        [1, 1],
+        [1, -1],
+        [-1, 1],
+        [-1, -1],
       ];
       const weights = [1, 3, 3, 3];
       const idx = weightedPick(weights);
       const [sa, sb] = signCombos[idx];
-      a = sa * rnd(1, 20);
-      b = sb * rnd(1, 20);
+      a = sa * rnd(1, 100);
+      b = sb * rnd(1, 100);
 
       if (op === '+') {
         ans = a + b;
@@ -382,25 +387,53 @@
         [1, 1], [1, -1], [-1, 1], [-1, -1],
       ];
       const [sa, sb] = pick1(signCombos);
-      a = sa * rnd(2, 10);
-      b = sb * rnd(2, 10);
+      a = sa * rnd(2, 12);
+      b = sb * rnd(2, 12);
       ans = a * b;
       display = `${fmt(a)} × ${wrap(b)} = ?`;
-    } else {
+    } else if (op === '÷') {
       const signCombos = [
         [1, 1], [1, -1], [-1, 1], [-1, -1],
       ];
       const [sb, sq] = pick1(signCombos);
-      const bDiv = sb * rnd(2, 10);
-      const q = sq * rnd(2, 10);
+      const bDiv = sb * rnd(2, 12);
+      const q = sq * rnd(2, 12);
       const aDiv = bDiv * q;
       ans = q;
       display = `${fmt(aDiv)} ÷ ${wrap(bDiv)} = ?`;
+    } else {
+      // ВОЗВЕДЕНИЕ В СТЕПЕНЬ
+      // ³ — основание до ±6
+      // ⁴ — основание до ±3
+      // ⁵ — основание до ±2
+      // ⁶,⁷,⁸ — только основание ±2
+      b = pick1([3, 4, 5, 6, 7, 8]);
+      if (b === 3) {
+        const bases3 = [];
+        for (let v = -6; v <= 6; v++) bases3.push(v);
+        a = pick1(bases3);
+      } else if (b === 4) {
+        a = pick1([-3, -2, -1, 0, 1, 2, 3]);
+      } else if (b === 5) {
+        a = pick1([-2, -1, 0, 1, 2]);
+      } else {
+        a = pick1([-2, 2]);
+      }
+      ans = Math.pow(a, b);
+      display = `${wrap(a)}${SUP[b]} = ?`;
     }
-    return { display, answer: ans, key: display, op };
+    // сохраняем a и b в задаче — пригодятся для умных дистракторов
+    return { display, answer: ans, key: display, op, a, b };
   }
 
   function restoreTask(key) {
+    // степень: (−2)⁷ = ?
+    const mPow = key.match(/^\(?(−?\d+)\)?([³⁴⁵⁶⁷⁸])\s=/);
+    if (mPow) {
+      const a = parseInt(mPow[1].replace('−', '-'), 10);
+      const b = EXP[mPow[2]];
+      return { display: key, answer: Math.pow(a, b), key, op: '^', a, b };
+    }
     const m = key.match(/^(−?\d+)\s([+−×÷])\s(\(−?\d+\)|−?\d+)\s=/);
     if (!m) return null;
     const parseNum = s => parseInt(s.replace(/[()−]/g, ch => ch === '−' ? '-' : ''), 10);
@@ -412,7 +445,62 @@
     else if (op === '−') ans = a - b;
     else if (op === '×') ans = a * b;
     else ans = a / b;
-    return { display: key, answer: ans, key, op };
+    return { display: key, answer: ans, key, op, a, b };
+  }
+
+  // ===== Умные дистракторы: типичные ученические ошибки =====
+  function makeDistractors(task) {
+    const { op, answer, a, b } = task;
+    const set = new Set();
+    const add = v => {
+      if (Number.isFinite(v) && Number.isInteger(v) && v !== answer) set.add(v);
+    };
+
+    if (op === '+' || op === '−') {
+      add(-answer);           // потеряли знак
+      add(Math.abs(answer));  // потеряли минус
+      add(answer + 10);       // ошибка в разряде
+      add(answer - 10);
+      add(answer + 1);
+      add(answer - 1);
+      // перепутали знак второго числа
+      add(a + b);             // как будто всегда «+»
+      add(a - b);             // как будто всегда «−»
+    } else if (op === '×' || op === '÷') {
+      add(-answer);           // потеряли знак
+      add(Math.abs(answer));  // потеряли минус
+      if (op === '×') {
+        add(answer + a);      // ошибка на один множитель
+        add(answer - a);
+        add(answer + b);
+        add(answer - b);
+        add(a + b);           // перепутали × и +
+      } else {
+        // для деления: a — делимое, b — делитель, answer — частное
+        add(answer + 1);
+        add(answer - 1);
+        add(answer + 2);
+        add(answer - 2);
+        add(a - b);           // перепутали ÷ и −
+      }
+    } else if (op === '^') {
+      add(a * b);                          // САМАЯ частая: степень как умножение
+      add(-answer);                        // потеряли знак
+      add(Math.abs(answer));               // потеряли минус
+      add(Math.pow(a, b - 1));             // соседняя степень
+      if (b < 8) add(Math.pow(a, b + 1));
+      add(a + b);                          // перепутали ^ и +
+      add(a * a);                          // возвели только в квадрат
+    }
+
+    // добираем соседними значениями, если чего-то не хватило
+    const scale = Math.max(2, Math.round(Math.abs(answer) * 0.2));
+    let guard = 0;
+    while (set.size < 8 && guard < 50) {
+      guard++;
+      add(answer + pick1([-scale, -Math.round(scale/2), Math.round(scale/2), scale, -1, 1, 2, -2]));
+    }
+    return [...set];
   }
 
   function makeTask() {
@@ -434,18 +522,25 @@
 
     answer = task.answer;
     currentDisplayKey = task.key;
+    currentOp = task.op;
     $('task').textContent = task.display;
     $('task').classList.remove('hit');
 
+    // умные дистракторы → перемешать → взять 3
+    const distractors = makeDistractors(task);
+    for (let i = distractors.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [distractors[i], distractors[j]] = [distractors[j], distractors[i]];
+    }
     const opts = new Set([answer]);
-    while (opts.size < 4) {
-      let fake;
-      if (task.op === '×' || task.op === '÷') {
-        fake = answer + pick1([-4,-3,-2,-1,1,2,3,4]);
-      } else {
-        fake = answer + pick1([-5,-4,-3,-2,-1,1,2,3,4,5]);
-      }
-      if (fake !== answer) opts.add(fake);
+    for (const d of distractors) {
+      if (opts.size >= 4) break;
+      opts.add(d);
+    }
+    let guard = 0;
+    while (opts.size < 4 && guard < 50) {
+      guard++;
+      opts.add(answer + rnd(-20, 20));
     }
     const arr = [...opts].sort(() => Math.random() - 0.5);
 
@@ -495,7 +590,11 @@
           b.classList.add('reveal');
         }
       });
-      $('msg').textContent = `❌ Правильно: ${fmt(answer)}`;
+      if (currentOp === '^') {
+        $('msg').textContent = `❌ Правильно: ${fmt(answer)} · нечётная степень → знак основания, чётная → «+»`;
+      } else {
+        $('msg').textContent = `❌ Правильно: ${fmt(answer)}`;
+      }
       $('msg').style.color = '#ff6b6b';
       $('msg').classList.add('show');
 
