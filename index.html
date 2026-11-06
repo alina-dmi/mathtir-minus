@@ -57,19 +57,8 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 #mode-duel .mini-icon { background: linear-gradient(135deg, #e879f9, #d946ef); box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); }
 .mini-text { font-size: 0.8rem; font-weight: 700; color: #e2e8f0; text-align: center; line-height: 1.2; z-index: 1; }
 
-/* Подпись автора */
-.author {
-  margin-top: 30px;
-  font-size: 0.75rem;
-  font-weight: 400;
-  color: #64748b;
-  text-align: center;
-  line-height: 1.4;
-}
-.author b {
-  font-weight: 600;
-  color: #94a3b8;
-}
+.author { margin-top: 30px; font-size: 0.75rem; font-weight: 400; color: #64748b; text-align: center; line-height: 1.4; }
+.author b { font-weight: 600; color: #94a3b8; }
 
 /* ===== ИГРА ===== */
 .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
@@ -78,7 +67,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .game-topbar .stat-label { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; font-weight: 600; }
 .game-topbar .stat-value { font-size: 1.2rem; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
 .game-topbar .hearts { font-size: 1rem; letter-spacing: 1px; }
-
 .game-topbar .rank { font-size: 0.8rem; color: #a5b4fc; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
 
 .timer { font-size: 1.4rem; font-weight: 800; color: #fcd34d; margin-bottom: 12px; text-align: center; text-shadow: 0 0 15px rgba(252, 211, 77, 0.4); }
@@ -100,21 +88,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .msg.success { color: #6ee7b7; }
 .msg.error { color: #fca5a5; }
 
-.btn-save-record { 
-  background: rgba(16, 185, 129, 0.15); 
-  border: 1px solid rgba(16, 185, 129, 0.4); 
-  color: #6ee7b7; 
-  padding: 10px 16px; 
-  border-radius: 14px; 
-  font-size: 0.9rem; 
-  font-weight: 700; 
-  cursor: pointer; 
-  width: 100%; 
-  margin-bottom: 12px; 
-  transition: opacity 0.3s, background 0.3s, color 0.3s; 
-  opacity: 0; 
-  pointer-events: none; 
-}
+.btn-save-record { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; padding: 10px 16px; border-radius: 14px; font-size: 0.9rem; font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 12px; transition: opacity 0.3s, background 0.3s, color 0.3s; opacity: 0; pointer-events: none; }
 .btn-save-record.show { opacity: 1; pointer-events: auto; }
 .btn-save-record:active { transform: scale(0.98); }
 .btn-save-record.saved { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); pointer-events: none; }
@@ -141,7 +115,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .rating-row .sc { font-weight: 800; color: #fcd34d; font-size: 1.1rem; }
 .rating-empty { text-align: center; color: rgba(255,255,255,0.4); font-size: 0.95rem; padding: 32px 0; }
 
-/* ===== МОДАЛКА ===== */
+/* ===== МОДАЛКИ ===== */
 .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 24px; }
 .modal-overlay.visible { display: flex; }
 .modal-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); text-align: center; }
@@ -221,6 +195,15 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .result-score { font-size: 3rem; font-weight: 800; color: #fff; margin-bottom: 24px; letter-spacing: 2px;}
 .result-btn { width: 100%; padding: 16px; font-size: 1.1rem; font-weight: 800; border: none; border-radius: 16px; background: #10b981; color: #fff; box-shadow: 0 4px 0 #059669; cursor: pointer; transition: 0.1s; margin-bottom: 12px; }
 .result-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #059669; }
+
+/* Окно ввода имен для дуэли */
+.duel-setup-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); text-align: center; }
+.duel-setup-box h3 { margin: 0 0 20px; font-size: 1.3rem; color: #fff; }
+.duel-setup-box input { width: 100%; padding: 14px; font-size: 1rem; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; outline: none; margin-bottom: 12px; text-align: center; }
+.duel-setup-box input:focus { border-color: #e879f9; }
+.duel-setup-box .start-btn { width: 100%; padding: 16px; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 14px; background: #d946ef; color: #fff; box-shadow: 0 4px 0 #a21caf; cursor: pointer; }
+.duel-setup-box .start-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #a21caf; }
+.duel-setup-box .skip-btn { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-top: 12px; cursor: pointer; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -285,7 +268,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
         </button>
       </div>
 
-      <!-- ВОЗВРАЩАЕМ ПОДПИСЬ АВТОРА -->
       <p class="author">
         Автор и создатель<br>
         <b>Алина Дмитриевна Оленева</b>
@@ -375,6 +357,17 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
         <button class="save" id="saveName">Поехали!</button>
       </div>
     </div>
+
+    <!-- МОДАЛКА ДЛЯ ВВОДА ИМЕН В ДУЭЛИ -->
+    <div class="modal-overlay" id="duelSetupModal">
+      <div class="duel-setup-box">
+        <h3>Гонка на двоих</h3>
+        <input type="text" id="duelInput1" maxlength="12" placeholder="Игрок 1">
+        <input type="text" id="duelInput2" maxlength="12" placeholder="Игрок 2">
+        <button class="start-btn" id="startDuelBtn">Поехали!</button>
+        <button class="skip-btn" id="skipDuelBtn">Просто играть (без имён)</button>
+      </div>
+    </div>
   </div>
 
   <div id="screen-duel">
@@ -456,6 +449,8 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   let duelTimeLeft = 60;
   let duelTimerInterval = null;
   let duelTask1 = null, duelTask2 = null;
+  let duelPlayerName1 = 'Игрок 1';
+  let duelPlayerName2 = 'Игрок 2';
 
   const $ = id => document.getElementById(id);
   const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -1025,14 +1020,28 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     }
   }
 
+  // Нажатие на кнопку "Гонка на двоих" в меню
   $('mode-duel').onclick = () => {
+    $('duelInput1').value = '';
+    $('duelInput2').value = '';
+    $('duelSetupModal').classList.add('visible');
+    setTimeout(() => $('duelInput1').focus(), 100);
+  };
+
+  // Запуск дуэли после ввода имен
+  function startDuelGame() {
+    duelPlayerName1 = $('duelInput1').value.trim() || 'Игрок 1';
+    duelPlayerName2 = $('duelInput2').value.trim() || 'Игрок 2';
+
+    $('duelSetupModal').classList.remove('visible');
+    
     duelActive = true;
     duelScore1 = 0; duelScore2 = 0; duelTimeLeft = 60;
     $('duelScore1').textContent = '0';
     $('duelScore2').textContent = '0';
     $('duelTimer').textContent = '60';
-    $('duelName1').textContent = playerName ? `${playerName}` : 'Игрок 1';
-    $('duelName2').textContent = 'Игрок 2';
+    $('duelName1').textContent = duelPlayerName1;
+    $('duelName2').textContent = duelPlayerName2;
 
     $('screen-duel').classList.add('active');
     $('duelResultPopup').classList.remove('visible');
@@ -1049,33 +1058,38 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
         endDuel();
       }
     }, 1000);
-  };
+  }
+
+  $('startDuelBtn').onclick = startDuelGame;
+  $('skipDuelBtn').onclick = startDuelGame;
+
+  // Ввод по Enter
+  $('duelInput2').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') startDuelGame();
+  });
 
   function endDuel() {
     duelActive = false;
     const totalScore = duelScore1 + duelScore2;
-    const pairName = playerName ? `${playerName} и Друг` : 'Команда';
+    const pairName = `${duelPlayerName1} и ${duelPlayerName2}`;
 
     $('duelResultScore').textContent = `${duelScore1} : ${duelScore2}`;
     if (duelScore1 > duelScore2) {
       $('duelResultTitle').textContent = '🏆 Победил Игрок 1!';
-      $('duelResultSubtitle').textContent = playerName ? `${playerName} — молодец!` : 'Отличная игра!';
+      $('duelResultSubtitle').textContent = `${duelPlayerName1} — молодец!`;
     } else if (duelScore2 > duelScore1) {
       $('duelResultTitle').textContent = '🏆 Победил Игрок 2!';
-      $('duelResultSubtitle').textContent = 'Отличная игра!';
+      $('duelResultSubtitle').textContent = `${duelPlayerName2} — молодец!`;
     } else {
       $('duelResultTitle').textContent = '🤝 Ничья!';
       $('duelResultSubtitle').textContent = 'Победила дружба!';
     }
 
     $('saveDuelBtn').onclick = () => {
-      const finalPairName = prompt('Как вас зовут? (Например: Алина и Миша)', pairName);
-      if (finalPairName) {
-        saveScore('duel', totalScore, finalPairName);
-        $('saveDuelBtn').textContent = 'Сохранено!';
-        $('saveDuelBtn').style.background = '#475569';
-        $('saveDuelBtn').style.boxShadow = 'none';
-      }
+      saveScore('duel', totalScore, pairName);
+      $('saveDuelBtn').textContent = 'Сохранено!';
+      $('saveDuelBtn').style.background = '#475569';
+      $('saveDuelBtn').style.boxShadow = 'none';
     };
 
     $('duelResultPopup').classList.add('visible');
