@@ -118,7 +118,36 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .modal-overlay.visible { display: flex; }
 .modal-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); text-align: center; }
 .modal-box h3 { margin: 0 0 16px; font-size: 1.3rem; color: #fff; }
-.modal-box input { width: 100%; padding: 16px; font-size: 1.1rem; border-radius: 14px; border: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; outline: none; margin-bottom: 16px; text-align: center; }
+
+/* Стили для поля ввода (тык для редактирования) */
+.name-input-wrapper {
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  padding: 0;
+  margin-bottom: 16px;
+  transition: border-color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.name-input-wrapper.active {
+  border-color: #a5b4fc;
+  background: rgba(165,180,252,0.1);
+  cursor: text;
+}
+.name-input-wrapper input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 16px;
+  outline: none;
+  text-align: center;
+}
+.name-input-wrapper input[readonly] {
+  cursor: pointer;
+  opacity: 0.9;
+}
 
 .personal-stats { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 14px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 10px; }
 .p-stat { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
@@ -300,7 +329,10 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
           <div class="p-stat"><span>🧠 Решено примеров</span><span id="pStatTotal">0</span></div>
         </div>
 
-        <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
+        <!-- Поле имени с логикой "тык для редактирования" -->
+        <div class="name-input-wrapper" id="nameWrapper">
+          <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя" readonly>
+        </div>
         
         <div class="difficulty-title">Уровень сложности</div>
         <div class="difficulty-group">
@@ -314,7 +346,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     </div>
   </div>
 
-  <!-- ЭКРАН ДУЭЛИ (Поверх всего) -->
+  <!-- ЭКРАН ДУЭЛИ -->
   <div id="screen-duel">
     <div class="duel-timer" id="duelTimer">60</div>
     <div class="duel-side">
@@ -389,7 +421,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   let currentRatingMode = 'classic';
   let currentRatingPeriod = 'all';
 
-  // Переменные для дуэли
   let duelActive = false;
   let duelScore1 = 0, duelScore2 = 0;
   let duelTimeLeft = 60;
@@ -796,6 +827,11 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   $('editNameBtn').onclick = () => {
     $('nameInput').value = playerName;
     
+    // Сбрасываем фокус и блокируем инпут
+    $('nameInput').readOnly = true;
+    $('nameWrapper').classList.remove('active');
+    if (document.activeElement) document.activeElement.blur();
+
     $('pStatBestClassic').textContent = localStorage.getItem('mathTirBestClassic') || '0';
     $('pStatBestTimed').textContent = localStorage.getItem('mathTirBestTimed') || '0';
     $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
@@ -805,7 +841,15 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     });
 
     $('nameModal').classList.add('visible');
-    $('nameInput').focus();
+  };
+
+  // Тык по полю — разрешаем редактирование
+  $('nameWrapper').onclick = () => {
+    if ($('nameInput').readOnly) {
+      $('nameInput').readOnly = false;
+      $('nameWrapper').classList.add('active');
+      $('nameInput').focus();
+    }
   };
 
   document.querySelectorAll('.diff-btn').forEach(btn => {
@@ -893,7 +937,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   $('mode-timed').onclick  = () => startGame('timed');
 
   // ===== ДУЭЛЬ (ГОНКА НА ДВОИХ) =====
-  
   function createDuelOptions(container, correctAnswer, task, onPick) {
     container.innerHTML = '';
     const distractors = makeDistractors(task);
@@ -935,9 +978,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
           setTimeout(() => nextDuelTask(1), 150);
         } else {
           btn.classList.add('wrong');
-          setTimeout(() => {
-            nextDuelTask(1);
-          }, 800);
+          setTimeout(() => nextDuelTask(1), 800);
         }
       });
     } else {
@@ -951,9 +992,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
           setTimeout(() => nextDuelTask(2), 150);
         } else {
           btn.classList.add('wrong');
-          setTimeout(() => {
-            nextDuelTask(2);
-          }, 800);
+          setTimeout(() => nextDuelTask(2), 800);
         }
       });
     }
@@ -1107,7 +1146,8 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
     $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
     
     $('nameModal').classList.add('visible');
-    $('nameInput').focus();
+    // Оставляем инпут в режиме чтения, пока не кликнут
+    $('nameInput').readOnly = true;
   }
 </script>
 </body>
