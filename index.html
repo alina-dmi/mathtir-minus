@@ -5,516 +5,234 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Математический тир: Отрицательные числа</title>
 <style>
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    margin: 0; min-height: 100vh;
-    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(160deg, #2b2e4a 0%, #1a1c2e 100%);
-    color: #f1f5f9; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 24px 16px;
-    user-select: none; overflow: hidden;
-  }
-
-  /* ===== Верхняя строка (в игре) ===== */
-  .topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: nowrap;
-    width: 100%; max-width: 420px;
-    font-size: 0.9rem; opacity: 0.9;
-    margin-bottom: 8px;
-    padding-top: 8px;
-    min-height: 2rem;
-    gap: 8px;
-  }
-  .topbar > span { white-space: nowrap; }
-  .topbar .rank {
-    color: #a5b4fc;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: transform 0.3s;
-    display: inline-block;
-  }
-  .topbar .rank.pulse { animation: rankPulse 0.5s ease-out; }
-  @keyframes rankPulse {
-    0%   { transform: scale(1); }
-    50%  { transform: scale(1.2); }
-    100% { transform: scale(1); }
-  }
-  .hearts { font-size: 1.1rem; letter-spacing: 2px; }
-
-  /* Кнопка сохранения */
-  .save-record-row {
-    width: 100%;
-    max-width: 420px;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 14px;
-    height: 32px;
-  }
-  .btn-save-record {
-    background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #6ee7b7;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s, transform 0.1s;
-  }
-  .btn-save-record.show {
-    opacity: 1;
-    pointer-events: auto;
-    animation: pulseGreen 1.5s infinite;
-  }
-  .btn-save-record:active { transform: scale(0.95); }
-  .btn-save-record.saved {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.5);
-    animation: none;
-    pointer-events: none;
-  }
-  @keyframes pulseGreen {
-    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-    70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-  }
-
-  /* ===== Меню ===== */
-  #menu {
-    display: flex; flex-direction: column; align-items: center;
-    width: 100%; max-width: 420px;
-    padding-top: 12px;
-  }
-  #menu h1 {
-    font-size: 1.6rem;
-    font-weight: 800;
-    margin: 0 0 4px;
-    text-align: center;
-    color: #fff;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-  #menu h2.subtitle {
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin: 0 0 20px;
-    text-align: center;
-    color: #a5b4fc;
-  }
-
-  .menu-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 24px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
-    padding: 10px 16px;
-  }
-  .profile-text {
-    font-size: 0.95rem;
-    color: rgba(255,255,255,0.7);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .profile-text b { color: #fff; font-weight: 700; }
-  .profile-edit {
-    background: none; border: none; color: #a5b4fc;
-    cursor: pointer; font-size: 0.9rem; padding: 0 0 0 6px;
-    text-decoration: none;
-  }
-  .rating-icon-btn {
-    background: rgba(165, 180, 252, 0.15);
-    border: 1px solid rgba(165, 180, 252, 0.3);
-    color: #fff;
-    font-size: 1rem;
-    border-radius: 10px;
-    padding: 6px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s;
-  }
-  .rating-icon-btn:active { background: rgba(165, 180, 252, 0.3); }
-  .rating-icon-btn span { font-size: 0.85rem; font-weight: 700; }
-
-  .mode-btn {
-    width: 100%;
-    padding: 18px 20px;
-    margin-bottom: 14px;
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: #fff;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.25);
-    opacity: 1;
-    transition: transform 0.1s;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-align: left;
-  }
-  .mode-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
-  }
-  .mode-btn .sym {
-    font-size: 1.4rem;
-    font-weight: 700;
-    line-height: 1;
-    opacity: 0.95;
-    min-width: 2.2rem;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .mode-btn .label { flex: 1; }
-
-  #mode-addsub { background: #c084fc; box-shadow: 0 5px 0 #9d68d6; }
-  #mode-muldiv { background: #5eead4; box-shadow: 0 5px 0 #3daaa3; color: #10202a; }
-  #mode-all    { background: #fcd34d; box-shadow: 0 5px 0 #cca632; color: #10202a; }
-  #mode-timed  { background: #fca5a5; box-shadow: 0 5px 0 #d47d7d; color: #10202a; }
-
-  #menu .author {
-    margin: 14px 0 0;
-    font-size: 0.75rem;
-    font-weight: 400;
-    color: #64748b;
-    text-align: center;
-    line-height: 1.4;
-  }
-  #menu .author b {
-    font-weight: 600;
-    color: #94a3b8;
-  }
-
-  /* ===== Игра ===== */
-  .task {
-    font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
-    margin: 10px 0 30px; text-align: center;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    transition: color 0.15s, transform 0.15s;
-    min-height: 4rem;
-  }
-  .task.hit { color: #6ee7b7; transform: scale(1.06); }
-
-  .answers {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 16px; width: 100%; max-width: 420px;
-  }
-  .ball {
-    padding: 26px 0; font-size: 1.9rem; font-weight: 600;
-    border: none; border-radius: 18px; cursor: pointer;
-    color: #fff; transition: transform 0.12s, background 0.15s, border 0.15s;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.25);
-    background: #334155;
-  }
-  .ball.positive { background: #0ea5e9; }
-  .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.25); }
-  
-  .ball.correct { background: #10b981 !important; animation: pop 0.25s ease-out; }
-  .ball.wrong {
-    background: #ef4444 !important;
-    opacity: 1;
-    border: 2px solid #fca5a5;
-  }
-  .ball.reveal {
-    background: #10b981 !important;
-    opacity: 0.85;
-    animation: pop 0.25s ease-out;
-  }
-  @keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.12); }
-    100% { transform: scale(1); }
-  }
-
-  .msg {
-    height: 1.6rem; margin-top: 16px;
-    font-size: 1.1rem; font-weight: 700; text-align: center;
-    opacity: 0; transition: opacity 0.15s;
-  }
-  .msg.show { opacity: 1; }
-
-  .actions { margin-top: 18px; text-align: center; }
-  .btn-main {
-    padding: 13px 28px; font-size: 1rem; font-weight: 700;
-    border: none; border-radius: 14px; cursor: pointer;
-    background: #e2e8f0; color: #1e293b;
-    box-shadow: 0 4px 0 #94a3b8;
-    opacity: 0; transform: translateY(6px);
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-  .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #94a3b8; }
-  
-  .link {
-    display: block; margin: 12px auto 0;
-    font-size: 0.85rem; color: rgba(255,255,255,0.4);
-    background: none; border: none; cursor: pointer;
-    text-decoration: underline; padding: 4px;
-  }
-  .link.secondary { font-size: 0.75rem; margin-top: 6px; }
-
-  #game { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 420px; }
-  #menu.hidden { display: none; }
-  #game.visible { display: flex; }
-
-  .confetti {
-    position: fixed; top: -20px; width: 10px; height: 10px;
-    border-radius: 2px; z-index: 15; pointer-events: none;
-    animation: fall linear forwards;
-  }
-  @keyframes fall {
-    to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-  }
-
-  .timer {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #fcd34d;
-    margin-bottom: 8px;
-    min-height: 1.6rem;
-  }
-
-  /* ===== Рейтинг ===== */
-  #rating {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    width: 100%; max-width: 420px;
-  }
-  #rating.visible { display: flex; }
-  #rating h2 {
-    font-size: 1.3rem;
-    font-weight: 800;
-    margin: 0 0 14px;
-    color: #a5b4fc;
-  }
-  .rating-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-    width: 100%;
-  }
-  .rating-tab {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    background: rgba(255,255,255,0.08);
-    color: #fff;
-  }
-  .rating-tab.active {
-    background: #a5b4fc;
-    color: #1e293b;
-  }
-  .rating-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .rating-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 12px;
-    font-size: 1rem;
-  }
-  .rating-row .pos {
-    font-weight: 800;
-    color: #a5b4fc;
-    min-width: 2rem;
-  }
-  .rating-row .nm { flex: 1; text-align: left; margin-left: 8px; }
-  .rating-row .sc { font-weight: 800; color: #fcd34d; }
-  .rating-empty {
-    text-align: center;
-    color: rgba(255,255,255,0.4);
-    font-size: 0.95rem;
-    padding: 24px 0;
-  }
-
-  /* ===== Модалка имени ===== */
-  .modal-overlay {
-    position: fixed; inset: 0;
-    background: rgba(15, 23, 42, 0.7);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    padding: 24px;
-  }
-  .modal-overlay.visible { display: flex; }
-  .modal-box {
-    background: #1e293b;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 18px;
-    padding: 24px;
-    width: 100%;
-    max-width: 360px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    text-align: center;
-  }
-  .modal-box h3 {
-    margin: 0 0 14px;
-    font-size: 1.2rem;
-    color: #fff;
-  }
-  .modal-box input {
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    border-radius: 12px;
-    border: 2px solid rgba(255,255,255,0.15);
-    background: rgba(255,255,255,0.05);
-    color: #fff;
-    outline: none;
-    margin-bottom: 14px;
-    text-align: center;
-  }
-  .modal-box input:focus { border-color: #a5b4fc; }
-  .modal-box .row {
-    display: flex;
-    gap: 10px;
-  }
-  .modal-box .row button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-  }
-  .modal-box .save { background: #10b981; color: #fff; box-shadow: 0 3px 0 #059669; }
-  .modal-box .save:active { transform: translateY(2px); box-shadow: 0 1px 0 #059669; }
-
-  @media (max-width: 360px) {
-    body { padding: 18px 12px; }
-    .topbar { font-size: 0.8rem; gap: 6px; margin-bottom: 8px; }
-    .hearts { font-size: 0.95rem; letter-spacing: 1px; }
-    .task { font-size: 2.7rem; margin: 8px 0 24px; }
-    .ball { font-size: 1.6rem; padding: 22px 0; }
-    .mode-btn { font-size: 1rem; padding: 16px 16px; }
-    #menu .author { font-size: 0.7rem; }
-  }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #1a1c2e; color: #f1f5f9; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 16px; overflow-x: hidden; position: relative; }
+.bg-glow { position: fixed; width: 300px; height: 300px; background: radial-gradient(circle, rgba(165, 180, 252, 0.15) 0%, transparent 70%); top: 20%; left: 50%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
+.floating-symbols { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.symbol { position: absolute; color: rgba(255, 255, 255, 0.03); font-weight: 800; font-size: 6rem; animation: floatUp 20s linear infinite; }
+@keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+#app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; }
+.screen { display: none; flex-direction: column; width: 100%; }
+.screen.active { display: flex; }
+.menu-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+.profile-chip { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.08); padding: 6px 14px 6px 6px; border-radius: 30px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255, 255, 255, 0.1); }
+.profile-chip:active { background: rgba(255, 255, 255, 0.15); }
+.avatar { width: 28px; height: 28px; background: #a5b4fc; color: #1a1c2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
+.profile-name { font-size: 0.9rem; font-weight: 600; color: #e2e8f0; }
+.icon-btn { width: 42px; height: 42px; background: rgba(255, 255, 255, 0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 255, 255, 0.1); cursor: pointer; transition: background 0.2s; color: #fcd34d; }
+.icon-btn:active { background: rgba(255, 255, 255, 0.15); }
+.icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+.header { text-align: center; margin-bottom: 32px; }
+.header h1 { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 8px; }
+.header .pill { display: inline-block; background: rgba(165, 180, 252, 0.15); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(165, 180, 252, 0.2); }
+.mode-list { display: flex; flex-direction: column; gap: 12px; }
+.mode-card { display: flex; align-items: center; padding: 16px 20px; border-radius: 20px; border: none; cursor: pointer; text-align: left; transition: transform 0.1s, filter 0.2s; position: relative; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.mode-card:active { transform: scale(0.98); filter: brightness(0.9); }
+.mode-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-right: 16px; background: rgba(255, 255, 255, 0.2); flex-shrink: 0; }
+.mode-icon svg { width: 24px; height: 24px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.mode-text { display: flex; flex-direction: column; flex: 1; }
+.mode-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 2px; }
+.mode-desc { font-size: 0.75rem; opacity: 0.8; font-weight: 500; }
+#mode-addsub { background: linear-gradient(135deg, #c084fc, #a855f7); }
+#mode-muldiv { background: linear-gradient(135deg, #2dd4bf, #0d9488); color: #042f2e; }
+#mode-muldiv .mode-icon { background: rgba(0,0,0,0.1); }
+#mode-muldiv .mode-icon svg { stroke: #042f2e; }
+#mode-muldiv .mode-desc { color: #042f2e; opacity: 0.7; }
+#mode-all { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #451a03; }
+#mode-all .mode-icon { background: rgba(0,0,0,0.1); }
+#mode-all .mode-icon svg { stroke: #451a03; }
+#mode-all .mode-desc { color: #451a03; opacity: 0.7; }
+#mode-timed { background: linear-gradient(135deg, #fb7185, #e11d48); }
+.game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 10px 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+.game-topbar .stat { display: flex; flex-direction: column; align-items: center; }
+.game-topbar .stat-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+.game-topbar .stat-value { font-size: 1.1rem; font-weight: 800; }
+.game-topbar .hearts { font-size: 1rem; letter-spacing: 1px; }
+.game-topbar .rank { font-size: 0.9rem; color: #a5b4fc; font-weight: 700; }
+.task-container { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px 20px; text-align: center; margin-bottom: 20px; min-height: 140px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+.task { font-size: 3rem; font-weight: 800; letter-spacing: 1px; transition: color 0.15s, transform 0.15s; }
+.task.hit { color: #6ee7b7; transform: scale(1.06); }
+.answers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.ball { padding: 22px 0; font-size: 1.6rem; font-weight: 700; border: none; border-radius: 16px; cursor: pointer; color: #fff; transition: transform 0.1s, background 0.2s; box-shadow: 0 4px 0 rgba(0,0,0,0.2); background: #334155; }
+.ball.positive { background: #0ea5e9; box-shadow: 0 4px 0 #0369a1; }
+.ball.negative { background: #475569; box-shadow: 0 4px 0 #1e293b; }
+.ball:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
+.ball.correct { background: #10b981 !important; box-shadow: 0 4px 0 #047857 !important; animation: pop 0.25s ease-out; }
+.ball.wrong { background: #ef4444 !important; box-shadow: 0 4px 0 #b91c1c !important; border: 2px solid #fca5a5; }
+.ball.reveal { background: #10b981 !important; box-shadow: 0 4px 0 #047857 !important; opacity: 0.85; animation: pop 0.25s ease-out; }
+@keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.msg { height: 1.6rem; margin-top: 8px; font-size: 1rem; font-weight: 700; text-align: center; opacity: 0; transition: opacity 0.15s; }
+.msg.show { opacity: 1; }
+.timer { font-size: 1.4rem; font-weight: 800; color: #fcd34d; margin-bottom: 12px; text-align: center; }
+.btn-save-record { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.1s; width: 100%; margin-bottom: 12px; }
+.btn-save-record.show { opacity: 1; pointer-events: auto; animation: pulseGreen 1.5s infinite; }
+.btn-save-record:active { transform: scale(0.98); }
+.btn-save-record.saved { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); animation: none; pointer-events: none; }
+@keyframes pulseGreen { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+.actions { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.btn-main { padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: #e2e8f0; color: #1e293b; box-shadow: 0 4px 0 #94a3b8; opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
+.btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #94a3b8; }
+.link { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 0.85rem; cursor: pointer; text-decoration: underline; padding: 8px; }
+.rating-header { display: flex; align-items: center; margin-bottom: 20px; }
+.back-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-right: 12px; }
+.rating-title { font-size: 1.4rem; font-weight: 800; }
+.rating-group { display: flex; flex-direction: column; width: 100%; margin-bottom: 16px; }
+.rating-group-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-bottom: 6px; padding-left: 4px; }
+.rating-tabs { display: flex; gap: 8px; width: 100%; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; }
+.rating-tab { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; background: transparent; color: #94a3b8; transition: all 0.2s; }
+.rating-tab.active { background: #334155; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.rating-list { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.rating-row { display: flex; align-items: center; padding: 14px 16px; background: rgba(255,255,255,0.05); border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
+.rating-row .pos { font-weight: 800; color: #a5b4fc; min-width: 2rem; }
+.rating-row .nm { flex: 1; text-align: left; margin-left: 8px; font-weight: 600; }
+.rating-row .sc { font-weight: 800; color: #fcd34d; font-size: 1.1rem; }
+.rating-empty { text-align: center; color: rgba(255,255,255,0.4); font-size: 0.95rem; padding: 32px 0; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 24px; }
+.modal-overlay.visible { display: flex; }
+.modal-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 100%; max-width: 340px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); text-align: center; }
+.modal-box h3 { margin: 0 0 16px; font-size: 1.3rem; color: #fff; }
+.modal-box input { width: 100%; padding: 16px; font-size: 1.1rem; border-radius: 14px; border: 2px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; outline: none; margin-bottom: 16px; text-align: center; }
+.modal-box input:focus { border-color: #a5b4fc; }
+.modal-box .save { width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 1rem; font-weight: 700; cursor: pointer; background: #10b981; color: #fff; box-shadow: 0 4px 0 #059669; }
+.modal-box .save:active { transform: translateY(2px); box-shadow: 0 2px 0 #059669; }
+.confetti { position: fixed; top: -20px; width: 10px; height: 10px; border-radius: 2px; z-index: 15; pointer-events: none; animation: fall linear forwards; }
+@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 </style>
-<!-- Подключаем Firebase через CDN (глобальный объект firebase) -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
-  <!-- ===== Меню ===== -->
-  <div id="menu">
-    <h1>🎯 Математический тир</h1>
-    <h2 class="subtitle">🧊 Отрицательные числа</h2>
-    
-    <div class="menu-topbar">
-      <div class="profile-text">
-        👤 <b id="profileName">...</b>
-        <button class="profile-edit" id="editNameBtn">✏️</button>
+  <div class="bg-glow"></div>
+  <div class="floating-symbols">
+    <div class="symbol" style="left: 10%; animation-delay: 0s;">+</div>
+    <div class="symbol" style="left: 80%; animation-delay: 5s;">−</div>
+    <div class="symbol" style="left: 30%; animation-delay: 12s;">×</div>
+    <div class="symbol" style="left: 60%; animation-delay: 18s;">÷</div>
+  </div>
+
+  <div id="app">
+    <div id="screen-menu" class="screen active">
+      <div class="menu-topbar">
+        <div class="profile-chip" id="editNameBtn">
+          <div class="avatar" id="avatarLetter">?</div>
+          <div class="profile-name" id="profileName">Гость</div>
+        </div>
+        <div class="icon-btn" id="openRatingBtn" title="Рейтинг">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.2 6.6.5-5.1 4.4 1.6 6.5-5.5-3.6-5.5 3.6 1.6-6.5-5.1-4.4 6.6-.5z"/></svg>
+        </div>
       </div>
-      <button class="rating-icon-btn" id="openRatingBtn">
-        🏆 <span>Рейтинг</span>
-      </button>
+
+      <div class="header">
+        <h1>Математический тир</h1>
+        <div class="pill">Отрицательные числа</div>
+      </div>
+
+      <div class="mode-list">
+        <button class="mode-card" id="mode-addsub">
+          <div class="mode-icon"><svg><path d="M5 12h14M12 5v14"/></svg></div>
+          <div class="mode-text">
+            <span class="mode-title">Сложение и вычитание</span>
+            <span class="mode-desc">Проверь свои силы с плюсом и минусом</span>
+          </div>
+        </button>
+
+        <button class="mode-card" id="mode-muldiv">
+          <div class="mode-icon"><svg><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+          <div class="mode-text">
+            <span class="mode-title">Умножение и деление</span>
+            <span class="mode-desc">Таблицы умножения и степени</span>
+          </div>
+        </button>
+
+        <button class="mode-card" id="mode-all">
+          <div class="mode-icon"><svg><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7 7 7 0 017 7z"/></svg></div>
+          <div class="mode-text">
+            <span class="mode-title">Всё вместе</span>
+            <span class="mode-desc">Полный микс из всех заданий</span>
+          </div>
+        </button>
+
+        <button class="mode-card" id="mode-timed">
+          <div class="mode-icon"><svg><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="mode-text">
+            <span class="mode-title">Блиц-турнир</span>
+            <span class="mode-desc">60 секунд на максимальный счёт</span>
+          </div>
+        </button>
+      </div>
     </div>
 
-    <button class="mode-btn" id="mode-addsub">
-      <span class="sym">+ −</span>
-      <span class="label">Сложение и вычитание</span>
-    </button>
-    <button class="mode-btn" id="mode-muldiv">
-      <span class="sym">× ÷ ^</span>
-      <span class="label">Умножение, деление и степень</span>
-    </button>
-    <button class="mode-btn" id="mode-all">
-      <span class="sym">🎲</span>
-      <span class="label">Всё вместе</span>
-    </button>
-    <button class="mode-btn" id="mode-timed">
-      <span class="sym">⚡</span>
-      <span class="label">Блиц-турнир (60 сек)</span>
-    </button>
+    <div id="screen-game" class="screen">
+      <div class="game-topbar">
+        <div class="stat">
+          <span class="stat-label">Счёт</span>
+          <span class="stat-value" id="score">0</span>
+        </div>
+        <div class="stat" id="hearts-container">
+          <span class="stat-label">Жизни</span>
+          <span class="hearts" id="hearts">❤️❤️❤️❤️❤️</span>
+        </div>
+        <div class="stat" id="rank-container">
+          <span class="stat-label">Ранг</span>
+          <span class="rank" id="rank">🌱 Новичок</span>
+        </div>
+      </div>
 
-    <p class="author">
-      Автор и создатель<br>
-      <b>Алина Дмитриевна Оленева</b>
-    </p>
-  </div>
+      <div class="timer" id="timer"></div>
+      <div class="task-container"><div class="task" id="task">…</div></div>
+      <div class="answers" id="answers"></div>
+      <div class="msg" id="msg"></div>
 
-  <!-- ===== Игра ===== -->
-  <div id="game">
-    <div class="topbar">
-      <span>Счёт: <b id="score">0</b></span>
-      <span class="hearts" id="hearts">❤️❤️❤️❤️❤️</span>
-      <span class="rank" id="rank">🌱 Новичок</span>
+      <button class="btn-save-record" id="saveRecordBtn">Сохранить рекорд</button>
+
+      <div class="actions">
+        <button class="btn-main" id="continue">▶ Продолжить</button>
+        <button class="link" id="restart">Начать заново</button>
+        <button class="link secondary" id="backToMenu">← В главное меню</button>
+      </div>
     </div>
 
-    <!-- Кнопка сохранения -->
-    <div class="save-record-row">
-      <button class="btn-save-record" id="saveRecordBtn">💾 Сохранить рекорд</button>
+    <div id="screen-rating" class="screen">
+      <div class="rating-header">
+        <button class="back-btn" id="backFromRating">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="rating-title">🏆 Рейтинг</div>
+      </div>
+
+      <div class="rating-group">
+        <div class="rating-group-label">Режим игры</div>
+        <div class="rating-tabs">
+          <button class="rating-tab active" id="tabClassic">Общий</button>
+          <button class="rating-tab" id="tabTimed">Блиц</button>
+        </div>
+      </div>
+
+      <div class="rating-group">
+        <div class="rating-group-label">Период</div>
+        <div class="rating-tabs">
+          <button class="rating-tab active" id="periodAll">Всё время</button>
+          <button class="rating-tab" id="periodMonth">Месяц</button>
+          <button class="rating-tab" id="periodWeek">Неделя</button>
+        </div>
+      </div>
+
+      <div class="rating-list" id="ratingList"></div>
     </div>
 
-    <div class="timer" id="timer"></div>
-    <div class="task" id="task">…</div>
-    <div class="answers" id="answers"></div>
-    <div class="msg" id="msg"></div>
-
-    <div class="actions">
-      <button class="btn-main" id="continue">▶ Продолжить</button>
-      <button class="link" id="restart">Начать заново</button>
-      <button class="link secondary" id="back">← Сменить режим</button>
-    </div>
-  </div>
-
-  <!-- ===== Рейтинг ===== -->
-  <div id="rating">
-    <h2>🏆 Рейтинг</h2>
-    <div class="rating-tabs">
-      <button class="rating-tab active" id="tabClassic">Общий</button>
-      <button class="rating-tab" id="tabTimed">Блиц</button>
-    </div>
-    <div class="rating-list" id="ratingList"></div>
-    <button class="link secondary" id="backFromRating" style="margin-top:24px;">← Назад в меню</button>
-  </div>
-
-  <!-- ===== Модалка имени ===== -->
-  <div class="modal-overlay" id="nameModal">
-    <div class="modal-box">
-      <h3>Как тебя зовут?</h3>
-      <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
-      <div class="row">
+    <div class="modal-overlay" id="nameModal">
+      <div class="modal-box">
+        <h3>Как тебя зовут?</h3>
+        <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
         <button class="save" id="saveName">Поехали!</button>
       </div>
     </div>
   </div>
 
-<script>
-  // ==========================================
-  // 1. ИНИЦИАЛИЗАЦИЯ FIREBASE
-  // ==========================================
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, push, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyD0RMzcWPaGs2z6KA0qYnYReEzOxapDoiM",
     authDomain: "math-tir-rating.firebaseapp.com",
@@ -525,12 +243,9 @@
     appId: "1:560830825752:web:a2c5df02f1917e40a24a6d"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-  // ==========================================
-  // 2. ПЕРЕМЕННЫЕ
-  // ==========================================
   const MAX_LIVES = 5;
   let score = 0, lives = MAX_LIVES, answer = 0, locked = false;
   let currentMode = 'all';
@@ -543,9 +258,10 @@
   let isTimedMode = false;
   let timeLeft = 60;
   let timerInterval = null;
-  let hasSavedCurrentRecord = false;
 
   let playerName = localStorage.getItem('mathTirName') || '';
+  let currentRatingMode = 'classic';
+  let currentRatingPeriod = 'all';
 
   const $ = id => document.getElementById(id);
   const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -773,7 +489,7 @@
     box.innerHTML = '';
     arr.forEach(v => {
       const btn = document.createElement('button');
-      btn.className = 'ball' + (v >= 0 ? ' positive' : '');
+      btn.className = 'ball' + (v >= 0 ? ' positive' : ' negative');
       btn.textContent = fmt(v);
       btn.dataset.value = v;
       btn.onclick = () => pick(btn, v);
@@ -795,17 +511,20 @@
       $('msg').textContent = '✅ Верно!';
       $('msg').style.color = '#6ee7b7';
       $('msg').classList.add('show');
-      
-      checkShowSaveBtn();
 
       const newRank = rankFor(score);
       if (newRank.at > prevRank.at && !isTimedMode) {
         $('rank').textContent = `${newRank.emoji} ${newRank.name}`;
-        $('rank').classList.remove('pulse');
-        void $('rank').offsetWidth;
-        $('rank').classList.add('pulse');
         confetti(40);
       }
+      
+      const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
+      if (score > parseInt(localStorage.getItem(recordKey) || '0', 10)) {
+        $('saveRecordBtn').classList.add('show');
+        $('saveRecordBtn').classList.remove('saved');
+        $('saveRecordBtn').textContent = 'Сохранить рекорд';
+      }
+      
       setTimeout(makeTask, 300);
     } else {
       if (!isTimedMode) {
@@ -814,9 +533,7 @@
       }
       btn.classList.add('wrong');
       document.querySelectorAll('.ball').forEach(b => {
-        if (parseInt(b.dataset.value, 10) === answer) {
-          b.classList.add('reveal');
-        }
+        if (parseInt(b.dataset.value, 10) === answer) b.classList.add('reveal');
       });
       if (currentOp === '^') {
         $('msg').textContent = `❌ Правильно: ${fmt(answer)} · нечётная степень → знак основания, чётная → «+»`;
@@ -836,110 +553,89 @@
     }
   }
 
-  // ==========================================
-  // 3. FIREBASE: ОТПРАВКА И ЗАГРУЗКА РЕЙТИНГА
-  // ==========================================
-  
   function saveScore(mode, finalScore) {
     if (!playerName) return;
-    db.ref(`scores/${mode}`).push({
+    push(ref(db, `scores/${mode}`), {
       name: playerName,
       score: finalScore,
       timestamp: Date.now()
     }).catch(e => console.error(e));
   }
 
-  function checkShowSaveBtn() {
-    if (score === 0 || !playerName || hasSavedCurrentRecord) {
-      $('saveRecordBtn').classList.remove('show');
-      return;
-    }
-    const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
-    const currentBest = parseInt(localStorage.getItem(recordKey) || '0', 10);
-
-    if (score > currentBest) {
-      $('saveRecordBtn').classList.add('show');
-      $('saveRecordBtn').classList.remove('saved');
-      $('saveRecordBtn').textContent = '💾 Сохранить рекорд';
-    } else {
-      $('saveRecordBtn').classList.remove('show');
-    }
-  }
-
-  $('saveRecordBtn').onclick = () => {
+  function checkAndSaveRecord() {
     if (score === 0 || !playerName) return;
     const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
     const currentBest = parseInt(localStorage.getItem(recordKey) || '0', 10);
-    
     if (score > currentBest) {
       localStorage.setItem(recordKey, score);
       saveScore(isTimedMode ? 'timed' : 'classic', score);
-      hasSavedCurrentRecord = true;
-      $('saveRecordBtn').classList.remove('show');
-      $('saveRecordBtn').classList.add('saved');
-      $('saveRecordBtn').textContent = '✅ Сохранено!';
     }
-  };
+  }
 
-  function loadLeaderboard(mode, containerId) {
+  function loadLeaderboard(mode, period, containerId) {
     const container = $(containerId);
     container.innerHTML = '<div class="rating-empty">Загрузка...</div>';
     
-    db.ref(`scores/${mode}`).limitToLast(100).once('value')
-      .then((snapshot) => {
-        const data = snapshot.val();
-        container.innerHTML = '';
-        if (!data) {
-          container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
-          return;
+    const q = query(ref(db, `scores/${mode}`), limitToLast(100));
+    onValue(q, (snapshot) => {
+      const data = snapshot.val();
+      container.innerHTML = '';
+      if (!data) {
+        container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
+        return;
+      }
+      
+      let filtered = Object.values(data);
+      if (period === 'month') {
+        const monthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+        filtered = filtered.filter(item => item.timestamp >= monthAgo);
+      } else if (period === 'week') {
+        const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        filtered = filtered.filter(item => item.timestamp >= weekAgo);
+      }
+
+      const bestScores = {};
+      filtered.forEach(item => {
+        if (!bestScores[item.name] || item.score > bestScores[item.name]) {
+          bestScores[item.name] = item.score;
         }
-        
-        const bestScores = {};
-        Object.values(data).forEach(item => {
-          if (!bestScores[item.name] || item.score > bestScores[item.name]) {
-            bestScores[item.name] = item.score;
-          }
-        });
-        
-        const sorted = Object.keys(bestScores)
-          .map(name => ({ name, score: bestScores[name] }))
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 10);
-          
-        if (sorted.length === 0) {
-          container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
-          return;
-        }
-        
-        sorted.forEach((item, index) => {
-          const row = document.createElement('div');
-          row.className = 'rating-row';
-          row.innerHTML = `
-            <span class="pos">${index + 1}</span>
-            <span class="nm">${item.name}</span>
-            <span class="sc">${item.score}</span>
-          `;
-          container.appendChild(row);
-        });
-      })
-      .catch(err => {
-        container.innerHTML = '<div class="rating-empty">Ошибка загрузки</div>';
-        console.error(err);
       });
+      
+      const sorted = Object.keys(bestScores)
+        .map(name => ({ name, score: bestScores[name] }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+        
+      if (sorted.length === 0) {
+        container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
+        return;
+      }
+      
+      sorted.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'rating-row';
+        row.innerHTML = `
+          <span class="pos">${index + 1}</span>
+          <span class="nm">${item.name}</span>
+          <span class="sc">${item.score}</span>
+        `;
+        container.appendChild(row);
+      });
+    });
   }
 
-  // ==========================================
-  // 4. УПРАВЛЕНИЕ ИГРОЙ И ИНТЕРФЕЙСОМ
-  // ==========================================
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    $(id).classList.add('active');
+  }
+
   function gameOver() {
     if (timerInterval) clearInterval(timerInterval);
     $('timer').textContent = '';
     $('task').textContent = isTimedMode ? '⏱️ Время вышло!' : '🏁 Жизни кончились!';
     $('answers').innerHTML = '';
-    $('saveRecordBtn').classList.remove('show');
     
     const r = rankFor(score);
-    
     $('msg').textContent = `Счёт: ${score} · ${r.emoji} ${r.name}`;
     $('msg').style.color = '#fff';
     $('msg').classList.add('show');
@@ -955,15 +651,14 @@
 
   function updateNameUI() {
     $('profileName').textContent = playerName || 'Гость';
+    $('avatarLetter').textContent = playerName ? playerName.charAt(0).toUpperCase() : '?';
   }
 
-  function showNameModal() {
+  $('editNameBtn').onclick = () => {
     $('nameInput').value = playerName;
     $('nameModal').classList.add('visible');
     $('nameInput').focus();
-  }
-
-  $('editNameBtn').onclick = showNameModal;
+  };
   
   $('saveName').onclick = () => {
     const val = $('nameInput').value.trim();
@@ -972,7 +667,6 @@
       localStorage.setItem('mathTirName', val);
       updateNameUI();
       $('nameModal').classList.remove('visible');
-      checkShowSaveBtn();
     } else {
       const inp = $('nameInput');
       inp.style.transform = 'translateX(5px)';
@@ -993,22 +687,17 @@
 
     score = 0; lives = MAX_LIVES;
     recentTasks = []; wrongQueue = [];
-    hasSavedCurrentRecord = false;
     $('score').textContent = 0;
     updateHearts();
     $('rank').textContent = `${RANKS[0].emoji} ${RANKS[0].name}`;
-    $('rank').classList.remove('pulse');
     $('continue').classList.remove('visible');
-    $('saveRecordBtn').classList.remove('show');
-    $('saveRecordBtn').classList.remove('saved');
+    $('saveRecordBtn').classList.remove('show', 'saved');
     
-    $('menu').classList.add('hidden');
-    $('rating').classList.remove('visible');
-    $('game').classList.add('visible');
+    showScreen('screen-game');
     
     if (isTimedMode) {
-      $('hearts').style.visibility = 'hidden';
-      $('rank').style.visibility = 'hidden';
+      $('hearts-container').style.display = 'none';
+      $('rank-container').style.display = 'none';
       timeLeft = 60;
       $('timer').textContent = `⏱️ ${timeLeft} сек`;
       if (timerInterval) clearInterval(timerInterval);
@@ -1021,8 +710,8 @@
         }
       }, 1000);
     } else {
-      $('hearts').style.visibility = 'visible';
-      $('rank').style.visibility = 'visible';
+      $('hearts-container').style.display = 'flex';
+      $('rank-container').style.display = 'flex';
       $('timer').textContent = '';
       if (timerInterval) clearInterval(timerInterval);
     }
@@ -1030,47 +719,91 @@
     makeTask();
   }
 
+  $('saveRecordBtn').onclick = () => {
+    if (score === 0 || !playerName) return;
+    const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
+    localStorage.setItem(recordKey, score);
+    saveScore(isTimedMode ? 'timed' : 'classic', score);
+    $('saveRecordBtn').textContent = 'Сохранено!';
+    $('saveRecordBtn').classList.add('saved');
+    $('saveRecordBtn').classList.remove('show');
+  };
+
   $('mode-addsub').onclick = () => startGame('addsub');
   $('mode-muldiv').onclick = () => startGame('muldiv');
   $('mode-all').onclick    = () => startGame('all');
   $('mode-timed').onclick  = () => startGame('timed');
 
   $('openRatingBtn').onclick = () => {
-    $('menu').classList.add('hidden');
-    $('rating').classList.add('visible');
+    showScreen('screen-rating');
     $('tabClassic').classList.add('active');
     $('tabTimed').classList.remove('active');
-    loadLeaderboard('classic', 'ratingList');
+    $('periodAll').classList.add('active');
+    $('periodMonth').classList.remove('active');
+    $('periodWeek').classList.remove('active');
+    currentRatingMode = 'classic';
+    currentRatingPeriod = 'all';
+    loadLeaderboard('classic', 'all', 'ratingList');
   };
+
+  $('backFromRating').onclick = () => showScreen('screen-menu');
 
   $('tabClassic').onclick = () => {
     $('tabClassic').classList.add('active');
     $('tabTimed').classList.remove('active');
-    loadLeaderboard('classic', 'ratingList');
+    currentRatingMode = 'classic';
+    loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
   };
 
   $('tabTimed').onclick = () => {
     $('tabTimed').classList.add('active');
     $('tabClassic').classList.remove('active');
-    loadLeaderboard('timed', 'ratingList');
+    currentRatingMode = 'timed';
+    loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
   };
 
-  $('backFromRating').onclick = () => {
-    $('rating').classList.remove('visible');
-    $('menu').classList.remove('hidden');
+  $('periodAll').onclick = () => {
+    $('periodAll').classList.add('active');
+    $('periodMonth').classList.remove('active');
+    $('periodWeek').classList.remove('active');
+    currentRatingPeriod = 'all';
+    loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
+  };
+
+  $('periodMonth').onclick = () => {
+    $('periodMonth').classList.add('active');
+    $('periodAll').classList.remove('active');
+    $('periodWeek').classList.remove('active');
+    currentRatingPeriod = 'month';
+    loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
+  };
+
+  $('periodWeek').onclick = () => {
+    $('periodWeek').classList.add('active');
+    $('periodAll').classList.remove('active');
+    $('periodMonth').classList.remove('active');
+    currentRatingPeriod = 'week';
+    loadLeaderboard(currentRatingMode, currentRatingPeriod, 'ratingList');
   };
 
   $('continue').onclick = () => startGame(currentMode);
   $('restart').onclick = () => startGame(currentMode);
   
-  $('back').onclick = () => {
+  $('backToMenu').onclick = () => {
     if (timerInterval) clearInterval(timerInterval);
-    $('game').classList.remove('visible');
-    $('menu').classList.remove('hidden');
+    checkAndSaveRecord();
+    showScreen('screen-menu');
   };
 
+  window.addEventListener('beforeunload', () => {
+    checkAndSaveRecord();
+  });
+
   updateNameUI();
-  if (!playerName) showNameModal();
+  if (!playerName) {
+    $('nameModal').classList.add('visible');
+    $('nameInput').focus();
+  }
 </script>
 </body>
 </html>
