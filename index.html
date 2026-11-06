@@ -9,8 +9,8 @@
   body {
     margin: 0; min-height: 100vh;
     font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
-    background: linear-gradient(160deg, #2a3a7a 0%, #1e2a5a 100%);
-    color: #fff; display: flex; flex-direction: column;
+    background: linear-gradient(160deg, #2b2e4a 0%, #1a1c2e 100%);
+    color: #f1f5f9; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     padding: 24px 16px;
     user-select: none; overflow: hidden;
@@ -29,7 +29,7 @@
   }
   .topbar > span { white-space: nowrap; }
   .topbar .rank {
-    color: #7dd3fc;
+    color: #a5b4fc;
     font-weight: 700;
     letter-spacing: 0.3px;
     overflow: hidden;
@@ -52,35 +52,35 @@
     padding-top: 12px;
   }
   #menu h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     margin: 0 0 4px;
     text-align: center;
     color: #fff;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
   #menu h2.subtitle {
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 500;
     margin: 0 0 20px;
     text-align: center;
-    color: #7dd3fc;
-    opacity: 1;
+    color: #a5b4fc;
   }
 
-  /* Верхняя панель в меню (Профиль + Рейтинг) */
+  /* Верхняя панель в меню */
   .menu-topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 24px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
     padding: 10px 16px;
   }
   .profile-text {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: rgba(255,255,255,0.7);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -88,15 +88,15 @@
   }
   .profile-text b { color: #fff; font-weight: 700; }
   .profile-edit {
-    background: none; border: none; color: #7dd3fc;
-    cursor: pointer; font-size: 0.85rem; padding: 0 0 0 6px;
-    text-decoration: underline;
+    background: none; border: none; color: #a5b4fc;
+    cursor: pointer; font-size: 0.9rem; padding: 0 0 0 6px;
+    text-decoration: none;
   }
   .rating-icon-btn {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(165, 180, 252, 0.15);
+    border: 1px solid rgba(165, 180, 252, 0.3);
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1rem;
     border-radius: 10px;
     padding: 6px 12px;
     cursor: pointer;
@@ -105,7 +105,7 @@
     gap: 6px;
     transition: background 0.2s;
   }
-  .rating-icon-btn:active { background: rgba(255,255,255,0.2); }
+  .rating-icon-btn:active { background: rgba(165, 180, 252, 0.3); }
   .rating-icon-btn span { font-size: 0.85rem; font-weight: 700; }
 
   .mode-btn {
@@ -115,12 +115,10 @@
     font-size: 1.15rem;
     font-weight: 700;
     color: #fff;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.35);
     border: none;
     border-radius: 16px;
     cursor: pointer;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.35);
-    opacity: 1;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.25);
     transition: transform 0.1s;
     display: flex;
     align-items: center;
@@ -129,7 +127,7 @@
   }
   .mode-btn:active {
     transform: translateY(2px);
-    box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.25);
   }
   .mode-btn .sym {
     font-size: 1.4rem;
@@ -143,34 +141,35 @@
     justify-content: center;
   }
   .mode-btn .label { flex: 1; }
-  #mode-addsub { background: #e05a6f; }
-  #mode-muldiv { background: #3fb8a8; }
-  #mode-all    { background: #e8a13a; }
-  #mode-timed  { background: #9b5de5; }
+
+  /* Спокойная палитра для режимов */
+  #mode-addsub { background: #c084fc; box-shadow: 0 5px 0 #9d68d6; } /* Мягкий фиолетовый */
+  #mode-muldiv { background: #5eead4; box-shadow: 0 5px 0 #3daaa3; color: #10202a; } /* Мягкий бирюзовый */
+  #mode-all    { background: #fcd34d; box-shadow: 0 5px 0 #cca632; color: #10202a; } /* Тёплый янтарный */
+  #mode-timed  { background: #fca5a5; box-shadow: 0 5px 0 #d47d7d; color: #10202a; } /* Мягкий коралловый */
 
   #menu .author {
     margin: 14px 0 0;
     font-size: 0.75rem;
     font-weight: 400;
-    color: #8a9bb5;
+    color: #64748b;
     text-align: center;
-    letter-spacing: 0.3px;
     line-height: 1.4;
   }
   #menu .author b {
     font-weight: 600;
-    color: #a3b3c9;
+    color: #94a3b8;
   }
 
   /* ===== Игра ===== */
   .task {
     font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
     margin: 10px 0 30px; text-align: center;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    text-shadow: 0 4px 12px rgba(0,0,0,0.3);
     transition: color 0.15s, transform 0.15s;
     min-height: 4rem;
   }
-  .task.hit { color: #2ecc71; transform: scale(1.06); }
+  .task.hit { color: #6ee7b7; transform: scale(1.06); }
 
   .answers {
     display: grid; grid-template-columns: 1fr 1fr;
@@ -180,19 +179,20 @@
     padding: 26px 0; font-size: 1.9rem; font-weight: 600;
     border: none; border-radius: 18px; cursor: pointer;
     color: #fff; transition: transform 0.12s, background 0.15s, border 0.15s;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.3);
-    background: #3d5a99;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.25);
+    background: #334155; /* Спокойный тёмно-синий для отрицательных */
   }
-  .ball.positive { background: #4a9d8e; }
-  .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
-  .ball.correct { background: #2ecc71 !important; animation: pop 0.25s ease-out; }
+  .ball.positive { background: #0ea5e9; } /* Мягкий голубой для положительных */
+  .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.25); }
+  
+  .ball.correct { background: #10b981 !important; animation: pop 0.25s ease-out; }
   .ball.wrong {
-    background: #8a3a3a !important;
+    background: #ef4444 !important;
     opacity: 1;
-    border: 2px solid #e05a6f;
+    border: 2px solid #fca5a5;
   }
   .ball.reveal {
-    background: #2ecc71 !important;
+    background: #10b981 !important;
     opacity: 0.85;
     animation: pop 0.25s ease-out;
   }
@@ -213,25 +213,22 @@
   .btn-main {
     padding: 13px 28px; font-size: 1rem; font-weight: 700;
     border: none; border-radius: 14px; cursor: pointer;
-    background: #e6e9f0; color: #1e2a5a;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+    background: #e2e8f0; color: #1e293b;
+    box-shadow: 0 4px 0 #94a3b8;
     opacity: 0; transform: translateY(6px);
     pointer-events: none;
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
   .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #94a3b8; }
+  
   .link {
     display: block; margin: 12px auto 0;
-    font-size: 0.85rem; color: rgba(255,255,255,0.6);
+    font-size: 0.85rem; color: rgba(255,255,255,0.4);
     background: none; border: none; cursor: pointer;
     text-decoration: underline; padding: 4px;
   }
-  .link.secondary {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
-    margin-top: 6px;
-  }
+  .link.secondary { font-size: 0.75rem; margin-top: 6px; }
 
   #game { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 420px; }
   #menu.hidden { display: none; }
@@ -249,7 +246,7 @@
   .timer {
     font-size: 1.4rem;
     font-weight: 800;
-    color: #ffd166;
+    color: #fcd34d;
     margin-bottom: 8px;
     min-height: 1.6rem;
   }
@@ -266,7 +263,7 @@
     font-size: 1.3rem;
     font-weight: 800;
     margin: 0 0 14px;
-    color: #7dd3fc;
+    color: #a5b4fc;
   }
   .rating-tabs {
     display: flex;
@@ -282,12 +279,12 @@
     font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
-    background: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.08);
     color: #fff;
   }
   .rating-tab.active {
-    background: #2ecc71;
-    color: #10202a;
+    background: #a5b4fc;
+    color: #1e293b;
   }
   .rating-list {
     width: 100%;
@@ -300,20 +297,20 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.06);
     border-radius: 12px;
     font-size: 1rem;
   }
   .rating-row .pos {
     font-weight: 800;
-    color: #7dd3fc;
+    color: #a5b4fc;
     min-width: 2rem;
   }
   .rating-row .nm { flex: 1; text-align: left; margin-left: 8px; }
-  .rating-row .sc { font-weight: 800; color: #ffd166; }
+  .rating-row .sc { font-weight: 800; color: #fcd34d; }
   .rating-empty {
     text-align: center;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.4);
     font-size: 0.95rem;
     padding: 24px 0;
   }
@@ -321,7 +318,7 @@
   /* ===== Модалка имени ===== */
   .modal-overlay {
     position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(15, 23, 42, 0.7);
     display: none;
     align-items: center;
     justify-content: center;
@@ -330,7 +327,8 @@
   }
   .modal-overlay.visible { display: flex; }
   .modal-box {
-    background: #2a3a7a;
+    background: #1e293b;
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: 18px;
     padding: 24px;
     width: 100%;
@@ -341,20 +339,21 @@
   .modal-box h3 {
     margin: 0 0 14px;
     font-size: 1.2rem;
+    color: #fff;
   }
   .modal-box input {
     width: 100%;
     padding: 14px;
     font-size: 1.1rem;
     border-radius: 12px;
-    border: 2px solid rgba(255,255,255,0.25);
-    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
     color: #fff;
     outline: none;
     margin-bottom: 14px;
     text-align: center;
   }
-  .modal-box input:focus { border-color: #7dd3fc; }
+  .modal-box input:focus { border-color: #a5b4fc; }
   .modal-box .row {
     display: flex;
     gap: 10px;
@@ -368,17 +367,8 @@
     font-weight: 700;
     cursor: pointer;
   }
-  .modal-box .save { background: #2ecc71; color: #10202a; }
-  .modal-box .cancel { background: rgba(255,255,255,0.15); color: #fff; }
-  .modal-box .clear {
-    margin-top: 10px;
-    background: none;
-    border: none;
-    color: rgba(255,255,255,0.5);
-    font-size: 0.8rem;
-    cursor: pointer;
-    text-decoration: underline;
-  }
+  .modal-box .save { background: #10b981; color: #fff; box-shadow: 0 3px 0 #059669; }
+  .modal-box .save:active { transform: translateY(2px); box-shadow: 0 1px 0 #059669; }
 
   @media (max-width: 360px) {
     body { padding: 18px 12px; }
@@ -398,7 +388,6 @@
     <h1>🎯 Математический тир</h1>
     <h2 class="subtitle">🧊 Отрицательные числа</h2>
     
-    <!-- Верхняя панель: Профиль и Рейтинг -->
     <div class="menu-topbar">
       <div class="profile-text">
         👤 <b id="profileName">...</b>
@@ -471,7 +460,6 @@
       <div class="row">
         <button class="save" id="saveName">Поехали!</button>
       </div>
-      <button class="clear" id="clearName" style="display:none;">Стереть имя</button>
     </div>
   </div>
 
@@ -551,7 +539,7 @@
   }
 
   function confetti(n) {
-    const colors = ['#ff6b6b','#4ecdc4','#ffa62b','#9b5de5','#7dd3fc','#a78bfa','#2ecc71'];
+    const colors = ['#fca5a5','#5eead4','#fcd34d','#a5b4fc','#7dd3fc','#c084fc'];
     for (let i = 0; i < n; i++) {
       const c = document.createElement('div');
       c.className = 'confetti';
@@ -759,7 +747,7 @@
       btn.classList.add('correct');
       $('task').classList.add('hit');
       $('msg').textContent = '✅ Верно!';
-      $('msg').style.color = '#2ecc71';
+      $('msg').style.color = '#6ee7b7';
       $('msg').classList.add('show');
 
       const newRank = rankFor(score);
@@ -787,7 +775,7 @@
       } else {
         $('msg').textContent = `❌ Правильно: ${fmt(answer)}`;
       }
-      $('msg').style.color = '#ff6b6b';
+      $('msg').style.color = '#fca5a5';
       $('msg').classList.add('show');
 
       if (currentDisplayKey && !wrongQueue.includes(currentDisplayKey)) {
@@ -886,7 +874,6 @@
     $('nameInput').focus();
   }
 
-  // Обработчики профиля
   $('editNameBtn').onclick = showNameModal;
   
   $('saveName').onclick = () => {
@@ -897,7 +884,6 @@
       updateNameUI();
       $('nameModal').classList.remove('visible');
     } else {
-      // Если пусто, трясем инпут
       const inp = $('nameInput');
       inp.style.transform = 'translateX(5px)';
       setTimeout(() => inp.style.transform = 'translateX(-5px)', 50);
@@ -910,11 +896,10 @@
     if (e.key === 'Enter') $('saveName').click();
   });
 
-  // Запуск игры
   function startGame(mode) {
     currentMode = mode;
     isTimedMode = (mode === 'timed');
-    if (isTimedMode) currentMode = 'all'; // Блиц - это всегда всё вместе
+    if (isTimedMode) currentMode = 'all';
 
     score = 0; lives = MAX_LIVES;
     recentTasks = []; wrongQueue = [];
@@ -952,7 +937,6 @@
     makeTask();
   }
 
-  // Переходы по меню
   $('mode-addsub').onclick = () => startGame('addsub');
   $('mode-muldiv').onclick = () => startGame('muldiv');
   $('mode-all').onclick    = () => startGame('all');
@@ -983,29 +967,18 @@
     $('menu').classList.remove('hidden');
   };
 
-  // Игровые кнопки
-  $('continue').onclick = () => {
-    startGame(currentMode);
-  };
-  $('restart').onclick = () => {
-    startGame(currentMode);
-  };
+  $('continue').onclick = () => startGame(currentMode);
+  $('restart').onclick = () => startGame(currentMode);
+  
   $('back').onclick = () => {
     if (timerInterval) clearInterval(timerInterval);
     $('game').classList.remove('visible');
     $('menu').classList.remove('hidden');
   };
 
-  // ==========================================
-  // 5. СТАРТ ПРИЛОЖЕНИЯ
-  // ==========================================
+  // Запуск при загрузке
   updateNameUI();
-  
-  // Если имени нет при загрузке - сразу просим
-  if (!playerName) {
-    showNameModal();
-  }
-  
+  if (!playerName) showNameModal();
 </script>
 </body>
 </html>
