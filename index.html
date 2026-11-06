@@ -16,7 +16,7 @@
     user-select: none; overflow: hidden;
   }
 
-  /* ===== Верхняя строка ===== */
+  /* ===== Верхняя строка (в игре) ===== */
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: nowrap;
@@ -45,105 +45,6 @@
   }
   .hearts { font-size: 1.1rem; letter-spacing: 2px; }
 
-  /* ===== Кнопка имени ===== */
-  .name-btn {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
-    color: #fff;
-    border-radius: 10px;
-    padding: 6px 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .name-btn.unset {
-    background: rgba(232,161,58,0.25);
-    border-color: rgba(232,161,58,0.6);
-    animation: namePulse 1.6s ease-in-out infinite;
-  }
-  @keyframes namePulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
-  }
-
-  /* ===== Пример ===== */
-  .task {
-    font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
-    margin: 10px 0 30px; text-align: center;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    transition: color 0.15s, transform 0.15s;
-    min-height: 4rem;
-  }
-  .task.hit { color: #2ecc71; transform: scale(1.06); }
-
-  /* ===== Ответы ===== */
-  .answers {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 16px; width: 100%; max-width: 420px;
-  }
-  .ball {
-    padding: 26px 0; font-size: 1.9rem; font-weight: 600;
-    border: none; border-radius: 18px; cursor: pointer;
-    color: #fff; transition: transform 0.12s, background 0.15s, border 0.15s;
-    box-shadow: 0 5px 0 rgba(0,0,0,0.3);
-    background: #3d5a99;
-  }
-  .ball.positive { background: #4a9d8e; }
-  .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
-  .ball.correct { background: #2ecc71 !important; animation: pop 0.25s ease-out; }
-  .ball.wrong {
-    background: #8a3a3a !important;
-    opacity: 1;
-    border: 2px solid #e05a6f;
-  }
-  .ball.reveal {
-    background: #2ecc71 !important;
-    opacity: 0.85;
-    animation: pop 0.25s ease-out;
-  }
-  @keyframes pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.12); }
-    100% { transform: scale(1); }
-  }
-
-  /* ===== Сообщение ===== */
-  .msg {
-    height: 1.6rem; margin-top: 16px;
-    font-size: 1.1rem; font-weight: 700; text-align: center;
-    opacity: 0; transition: opacity 0.15s;
-  }
-  .msg.show { opacity: 1; }
-
-  /* ===== Кнопки ===== */
-  .actions { margin-top: 18px; text-align: center; }
-  .btn-main {
-    padding: 13px 28px; font-size: 1rem; font-weight: 700;
-    border: none; border-radius: 14px; cursor: pointer;
-    background: #e6e9f0; color: #1e2a5a;
-    box-shadow: 0 4px 0 rgba(0,0,0,0.25);
-    opacity: 0; transform: translateY(6px);
-    pointer-events: none;
-    transition: opacity 0.25s ease, transform 0.25s ease;
-  }
-  .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
-  .link {
-    display: block; margin: 12px auto 0;
-    font-size: 0.85rem; color: rgba(255,255,255,0.6);
-    background: none; border: none; cursor: pointer;
-    text-decoration: underline; padding: 4px;
-  }
-  .link.secondary {
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.4);
-    margin-top: 6px;
-  }
-
   /* ===== Меню ===== */
   #menu {
     display: flex; flex-direction: column; align-items: center;
@@ -161,11 +62,51 @@
   #menu h2.subtitle {
     font-size: 1.1rem;
     font-weight: 600;
-    margin: 0 0 26px;
+    margin: 0 0 20px;
     text-align: center;
     color: #7dd3fc;
     opacity: 1;
   }
+
+  /* Верхняя панель в меню (Профиль + Рейтинг) */
+  .menu-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 24px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 10px 16px;
+  }
+  .profile-text {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .profile-text b { color: #fff; font-weight: 700; }
+  .profile-edit {
+    background: none; border: none; color: #7dd3fc;
+    cursor: pointer; font-size: 0.85rem; padding: 0 0 0 6px;
+    text-decoration: underline;
+  }
+  .rating-icon-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    padding: 6px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+  }
+  .rating-icon-btn:active { background: rgba(255,255,255,0.2); }
+  .rating-icon-btn span { font-size: 0.85rem; font-weight: 700; }
 
   .mode-btn {
     width: 100%;
@@ -206,7 +147,6 @@
   #mode-muldiv { background: #3fb8a8; }
   #mode-all    { background: #e8a13a; }
   #mode-timed  { background: #9b5de5; }
-  #mode-rating { background: #2ecc71; }
 
   #menu .author {
     margin: 14px 0 0;
@@ -222,6 +162,77 @@
     color: #a3b3c9;
   }
 
+  /* ===== Игра ===== */
+  .task {
+    font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
+    margin: 10px 0 30px; text-align: center;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: color 0.15s, transform 0.15s;
+    min-height: 4rem;
+  }
+  .task.hit { color: #2ecc71; transform: scale(1.06); }
+
+  .answers {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; width: 100%; max-width: 420px;
+  }
+  .ball {
+    padding: 26px 0; font-size: 1.9rem; font-weight: 600;
+    border: none; border-radius: 18px; cursor: pointer;
+    color: #fff; transition: transform 0.12s, background 0.15s, border 0.15s;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.3);
+    background: #3d5a99;
+  }
+  .ball.positive { background: #4a9d8e; }
+  .ball:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(0,0,0,0.3); }
+  .ball.correct { background: #2ecc71 !important; animation: pop 0.25s ease-out; }
+  .ball.wrong {
+    background: #8a3a3a !important;
+    opacity: 1;
+    border: 2px solid #e05a6f;
+  }
+  .ball.reveal {
+    background: #2ecc71 !important;
+    opacity: 0.85;
+    animation: pop 0.25s ease-out;
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .msg {
+    height: 1.6rem; margin-top: 16px;
+    font-size: 1.1rem; font-weight: 700; text-align: center;
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .msg.show { opacity: 1; }
+
+  .actions { margin-top: 18px; text-align: center; }
+  .btn-main {
+    padding: 13px 28px; font-size: 1rem; font-weight: 700;
+    border: none; border-radius: 14px; cursor: pointer;
+    background: #e6e9f0; color: #1e2a5a;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+    opacity: 0; transform: translateY(6px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+  .link {
+    display: block; margin: 12px auto 0;
+    font-size: 0.85rem; color: rgba(255,255,255,0.6);
+    background: none; border: none; cursor: pointer;
+    text-decoration: underline; padding: 4px;
+  }
+  .link.secondary {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+  }
+
   #game { display: none; flex-direction: column; align-items: center; width: 100%; max-width: 420px; }
   #menu.hidden { display: none; }
   #game.visible { display: flex; }
@@ -235,7 +246,6 @@
     to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
 
-  /* ===== Таймер ===== */
   .timer {
     font-size: 1.4rem;
     font-weight: 800;
@@ -378,7 +388,6 @@
     .ball { font-size: 1.6rem; padding: 22px 0; }
     .mode-btn { font-size: 1rem; padding: 16px 16px; }
     #menu .author { font-size: 0.7rem; }
-    .name-btn { max-width: 80px; font-size: 0.72rem; }
   }
 </style>
 </head>
@@ -389,6 +398,17 @@
     <h1>🎯 Математический тир</h1>
     <h2 class="subtitle">🧊 Отрицательные числа</h2>
     
+    <!-- Верхняя панель: Профиль и Рейтинг -->
+    <div class="menu-topbar">
+      <div class="profile-text">
+        👤 <b id="profileName">...</b>
+        <button class="profile-edit" id="editNameBtn">✏️</button>
+      </div>
+      <button class="rating-icon-btn" id="openRatingBtn">
+        🏆 <span>Рейтинг</span>
+      </button>
+    </div>
+
     <button class="mode-btn" id="mode-addsub">
       <span class="sym">+ −</span>
       <span class="label">Сложение и вычитание</span>
@@ -402,12 +422,8 @@
       <span class="label">Всё вместе</span>
     </button>
     <button class="mode-btn" id="mode-timed">
-      <span class="sym">⏱️</span>
-      <span class="label">Игра на время (60 сек)</span>
-    </button>
-    <button class="mode-btn" id="mode-rating">
-      <span class="sym">🏆</span>
-      <span class="label">Рейтинг</span>
+      <span class="sym">⚡</span>
+      <span class="label">Блиц-турнир (60 сек)</span>
     </button>
 
     <p class="author">
@@ -422,7 +438,6 @@
       <span>Счёт: <b id="score">0</b></span>
       <span class="hearts" id="hearts">❤️❤️❤️❤️❤️</span>
       <span class="rank" id="rank">🌱 Новичок</span>
-      <button class="name-btn unset" id="nameBtn">👤 Имя</button>
     </div>
 
     <div class="timer" id="timer"></div>
@@ -442,7 +457,7 @@
     <h2>🏆 Рейтинг</h2>
     <div class="rating-tabs">
       <button class="rating-tab active" id="tabClassic">Общий</button>
-      <button class="rating-tab" id="tabTimed">На время</button>
+      <button class="rating-tab" id="tabTimed">Блиц</button>
     </div>
     <div class="rating-list" id="ratingList"></div>
     <button class="link secondary" id="backFromRating" style="margin-top:24px;">← Назад в меню</button>
@@ -454,19 +469,18 @@
       <h3>Как тебя зовут?</h3>
       <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
       <div class="row">
-        <button class="save" id="saveName">Сохранить</button>
-        <button class="cancel" id="cancelName">Отмена</button>
+        <button class="save" id="saveName">Поехали!</button>
       </div>
-      <button class="clear" id="clearName">Стереть имя</button>
+      <button class="clear" id="clearName" style="display:none;">Стереть имя</button>
     </div>
   </div>
 
 <script type="module">
   // ==========================================
-  // 1. ИНИЦИАЛИЗАЦИЯ FIREBASE (Твои ключи)
+  // 1. ИНИЦИАЛИЗАЦИЯ FIREBASE
   // ==========================================
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getDatabase, ref, push, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyD0RMzcWPaGs2z6KA0qYnYReEzOxapDoiM",
@@ -482,7 +496,7 @@
   const db = getDatabase(app);
 
   // ==========================================
-  // 2. ПЕРЕМЕННЫЕ И ЛОГИКА ИГРЫ
+  // 2. ПЕРЕМЕННЫЕ
   // ==========================================
   const MAX_LIVES = 5;
   let score = 0, lives = MAX_LIVES, answer = 0, locked = false;
@@ -498,8 +512,6 @@
   let timerInterval = null;
 
   let playerName = localStorage.getItem('mathTirName') || '';
-  let bestClassic = parseInt(localStorage.getItem('mathTirBestClassic') || '0', 10);
-  let bestTimed = parseInt(localStorage.getItem('mathTirBestTimed') || '0', 10);
 
   const $ = id => document.getElementById(id);
   const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -751,7 +763,6 @@
       $('msg').classList.add('show');
 
       const newRank = rankFor(score);
-
       if (newRank.at > prevRank.at && !isTimedMode) {
         $('rank').textContent = `${newRank.emoji} ${newRank.name}`;
         $('rank').classList.remove('pulse');
@@ -805,7 +816,6 @@
     const container = $(containerId);
     container.innerHTML = '<div class="rating-empty">Загрузка...</div>';
     
-    // Берем последние 100 записей, чтобы найти максимумы
     const q = query(ref(db, `scores/${mode}`), limitToLast(100));
     onValue(q, (snapshot) => {
       const data = snapshot.val();
@@ -855,75 +865,56 @@
     $('answers').innerHTML = '';
     
     const r = rankFor(score);
-    let bestType = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
-    let best = isTimedMode ? bestTimed : bestClassic;
-    let bestMsg = '';
     
-    if (score > best) {
-      localStorage.setItem(bestType, score);
-      if (isTimedMode) bestTimed = score; else bestClassic = score;
-      bestMsg = ' 🎉 Новый рекорд!';
-      confetti(20);
-    }
-    
-    $('msg').textContent = `Счёт: ${score} · ${r.emoji} ${r.name}${bestMsg}`;
+    $('msg').textContent = `Счёт: ${score} · ${r.emoji} ${r.name}`;
     $('msg').style.color = '#fff';
     $('msg').classList.add('show');
     $('continue').classList.add('visible');
     
-    // Отправляем в Firebase
     if (playerName) {
       saveScore(isTimedMode ? 'timed' : 'classic', score);
     }
   }
 
   function updateNameUI() {
-    const btn = $('nameBtn');
-    if (playerName) {
-      btn.textContent = `👤 ${playerName}`;
-      btn.classList.remove('unset');
-    } else {
-      btn.textContent = '👤 Имя';
-      btn.classList.add('unset');
-    }
+    $('profileName').textContent = playerName || 'Гость';
   }
 
-  $('nameBtn').onclick = () => {
+  function showNameModal() {
     $('nameInput').value = playerName;
     $('nameModal').classList.add('visible');
     $('nameInput').focus();
-  };
+  }
 
+  // Обработчики профиля
+  $('editNameBtn').onclick = showNameModal;
+  
   $('saveName').onclick = () => {
     const val = $('nameInput').value.trim();
     if (val) {
       playerName = val;
       localStorage.setItem('mathTirName', val);
       updateNameUI();
+      $('nameModal').classList.remove('visible');
+    } else {
+      // Если пусто, трясем инпут
+      const inp = $('nameInput');
+      inp.style.transform = 'translateX(5px)';
+      setTimeout(() => inp.style.transform = 'translateX(-5px)', 50);
+      setTimeout(() => inp.style.transform = 'translateX(5px)', 100);
+      setTimeout(() => inp.style.transform = 'translateX(0)', 150);
     }
-    $('nameModal').classList.remove('visible');
-  };
-
-  $('cancelName').onclick = () => {
-    $('nameModal').classList.remove('visible');
-  };
-
-  $('clearName').onclick = () => {
-    playerName = '';
-    localStorage.removeItem('mathTirName');
-    updateNameUI();
-    $('nameModal').classList.remove('visible');
   };
 
   $('nameInput').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') $('saveName').click();
   });
 
+  // Запуск игры
   function startGame(mode) {
     currentMode = mode;
     isTimedMode = (mode === 'timed');
-    
-    if (isTimedMode) currentMode = 'all'; // Режим на время - это всегда всё вместе
+    if (isTimedMode) currentMode = 'all'; // Блиц - это всегда всё вместе
 
     score = 0; lives = MAX_LIVES;
     recentTasks = []; wrongQueue = [];
@@ -961,12 +952,13 @@
     makeTask();
   }
 
+  // Переходы по меню
   $('mode-addsub').onclick = () => startGame('addsub');
   $('mode-muldiv').onclick = () => startGame('muldiv');
   $('mode-all').onclick    = () => startGame('all');
   $('mode-timed').onclick  = () => startGame('timed');
 
-  $('mode-rating').onclick = () => {
+  $('openRatingBtn').onclick = () => {
     $('menu').classList.add('hidden');
     $('rating').classList.add('visible');
     $('tabClassic').classList.add('active');
@@ -991,22 +983,29 @@
     $('menu').classList.remove('hidden');
   };
 
+  // Игровые кнопки
   $('continue').onclick = () => {
     startGame(currentMode);
   };
-
   $('restart').onclick = () => {
     startGame(currentMode);
   };
-
   $('back').onclick = () => {
     if (timerInterval) clearInterval(timerInterval);
     $('game').classList.remove('visible');
     $('menu').classList.remove('hidden');
   };
 
-  // Инициализация при загрузке
+  // ==========================================
+  // 5. СТАРТ ПРИЛОЖЕНИЯ
+  // ==========================================
   updateNameUI();
+  
+  // Если имени нет при загрузке - сразу просим
+  if (!playerName) {
+    showNameModal();
+  }
+  
 </script>
 </body>
 </html>
