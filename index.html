@@ -57,6 +57,20 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 #mode-duel .mini-icon { background: linear-gradient(135deg, #e879f9, #d946ef); box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); }
 .mini-text { font-size: 0.8rem; font-weight: 700; color: #e2e8f0; text-align: center; line-height: 1.2; z-index: 1; }
 
+/* Подпись автора */
+.author {
+  margin-top: 30px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.4;
+}
+.author b {
+  font-weight: 600;
+  color: #94a3b8;
+}
+
 /* ===== ИГРА ===== */
 .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
 .game-topbar .stat { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
@@ -65,7 +79,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .game-topbar .stat-value { font-size: 1.2rem; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
 .game-topbar .hearts { font-size: 1rem; letter-spacing: 1px; }
 
-/* Улучшенный ранг, чтобы не переносился */
 .game-topbar .rank { font-size: 0.8rem; color: #a5b4fc; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
 
 .timer { font-size: 1.4rem; font-weight: 800; color: #fcd34d; margin-bottom: 12px; text-align: center; text-shadow: 0 0 15px rgba(252, 211, 77, 0.4); }
@@ -87,7 +100,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .msg.success { color: #6ee7b7; }
 .msg.error { color: #fca5a5; }
 
-/* Кнопка сохранения (без пульсации, просто загорается) */
 .btn-save-record { 
   background: rgba(16, 185, 129, 0.15); 
   border: 1px solid rgba(16, 185, 129, 0.4); 
@@ -103,11 +115,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
   opacity: 0; 
   pointer-events: none; 
 }
-.btn-save-record.show { 
-  opacity: 1; 
-  pointer-events: auto; 
-  /* Убрали анимацию pulseGreen */
-}
+.btn-save-record.show { opacity: 1; pointer-events: auto; }
 .btn-save-record:active { transform: scale(0.98); }
 .btn-save-record.saved { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); pointer-events: none; }
 
@@ -276,6 +284,12 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
           <div class="mini-text">Гонка на двоих</div>
         </button>
       </div>
+
+      <!-- ВОЗВРАЩАЕМ ПОДПИСЬ АВТОРА -->
+      <p class="author">
+        Автор и создатель<br>
+        <b>Алина Дмитриевна Оленева</b>
+      </p>
     </div>
 
     <div id="screen-game" class="screen">
@@ -299,7 +313,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
       <div class="answers" id="answers"></div>
       <div class="msg" id="msg"></div>
 
-      <!-- Кнопка сохранения (постоянная, но неактивная) -->
       <button class="btn-save-record" id="saveRecordBtn">Сохранить рекорд</button>
 
       <div class="actions">
