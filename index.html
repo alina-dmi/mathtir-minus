@@ -16,6 +16,7 @@
     user-select: none; overflow: hidden;
   }
 
+  /* ===== Верхняя строка ===== */
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     flex-wrap: nowrap;
@@ -24,7 +25,7 @@
     margin-bottom: 22px;
     padding-top: 8px;
     min-height: 2rem;
-    gap: 10px;
+    gap: 8px;
   }
   .topbar > span { white-space: nowrap; }
   .topbar .rank {
@@ -44,6 +45,32 @@
   }
   .hearts { font-size: 1.1rem; letter-spacing: 2px; }
 
+  /* ===== Кнопка имени ===== */
+  .name-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    border-radius: 10px;
+    padding: 6px 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .name-btn.unset {
+    background: rgba(232,161,58,0.25);
+    border-color: rgba(232,161,58,0.6);
+    animation: namePulse 1.6s ease-in-out infinite;
+  }
+  @keyframes namePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* ===== Пример ===== */
   .task {
     font-size: 3.2rem; font-weight: 800; letter-spacing: 1px;
     margin: 10px 0 30px; text-align: center;
@@ -53,6 +80,7 @@
   }
   .task.hit { color: #2ecc71; transform: scale(1.06); }
 
+  /* ===== Ответы ===== */
   .answers {
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 16px; width: 100%; max-width: 420px;
@@ -83,6 +111,7 @@
     100% { transform: scale(1); }
   }
 
+  /* ===== Сообщение ===== */
   .msg {
     height: 1.6rem; margin-top: 16px;
     font-size: 1.1rem; font-weight: 700; text-align: center;
@@ -90,6 +119,7 @@
   }
   .msg.show { opacity: 1; }
 
+  /* ===== Кнопки ===== */
   .actions { margin-top: 18px; text-align: center; }
   .btn-main {
     padding: 13px 28px; font-size: 1rem; font-weight: 700;
@@ -114,6 +144,7 @@
     margin-top: 6px;
   }
 
+  /* ===== Меню ===== */
   #menu {
     display: flex; flex-direction: column; align-items: center;
     width: 100%; max-width: 420px;
@@ -170,15 +201,12 @@
     align-items: center;
     justify-content: center;
   }
-  .mode-btn .sym svg {
-    display: block;
-    width: 22px;
-    height: 22px;
-  }
   .mode-btn .label { flex: 1; }
   #mode-addsub { background: #e05a6f; }
   #mode-muldiv { background: #3fb8a8; }
   #mode-all    { background: #e8a13a; }
+  #mode-timed  { background: #9b5de5; }
+  #mode-rating { background: #2ecc71; }
 
   #menu .author {
     margin: 14px 0 0;
@@ -207,6 +235,141 @@
     to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
   }
 
+  /* ===== Таймер ===== */
+  .timer {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffd166;
+    margin-bottom: 8px;
+    min-height: 1.6rem;
+  }
+
+  /* ===== Рейтинг ===== */
+  #rating {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; max-width: 420px;
+  }
+  #rating.visible { display: flex; }
+  #rating h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin: 0 0 14px;
+    color: #7dd3fc;
+  }
+  .rating-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+  .rating-tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+  }
+  .rating-tab.active {
+    background: #2ecc71;
+    color: #10202a;
+  }
+  .rating-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rating-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+  .rating-row .pos {
+    font-weight: 800;
+    color: #7dd3fc;
+    min-width: 2rem;
+  }
+  .rating-row .nm { flex: 1; text-align: left; margin-left: 8px; }
+  .rating-row .sc { font-weight: 800; color: #ffd166; }
+  .rating-empty {
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.95rem;
+    padding: 24px 0;
+  }
+
+  /* ===== Модалка имени ===== */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 24px;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal-box {
+    background: #2a3a7a;
+    border-radius: 18px;
+    padding: 24px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+  .modal-box h3 {
+    margin: 0 0 14px;
+    font-size: 1.2rem;
+  }
+  .modal-box input {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    outline: none;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .modal-box input:focus { border-color: #7dd3fc; }
+  .modal-box .row {
+    display: flex;
+    gap: 10px;
+  }
+  .modal-box .row button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .modal-box .save { background: #2ecc71; color: #10202a; }
+  .modal-box .cancel { background: rgba(255,255,255,0.15); color: #fff; }
+  .modal-box .clear {
+    margin-top: 10px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
   @media (max-width: 360px) {
     body { padding: 18px 12px; }
     .topbar { font-size: 0.8rem; gap: 6px; margin-bottom: 16px; }
@@ -215,14 +378,17 @@
     .ball { font-size: 1.6rem; padding: 22px 0; }
     .mode-btn { font-size: 1rem; padding: 16px 16px; }
     #menu .author { font-size: 0.7rem; }
+    .name-btn { max-width: 80px; font-size: 0.72rem; }
   }
 </style>
 </head>
 <body>
 
+  <!-- ===== Меню ===== -->
   <div id="menu">
     <h1>🎯 Математический тир</h1>
     <h2 class="subtitle">🧊 Отрицательные числа</h2>
+    
     <button class="mode-btn" id="mode-addsub">
       <span class="sym">+ −</span>
       <span class="label">Сложение и вычитание</span>
@@ -232,18 +398,16 @@
       <span class="label">Умножение, деление и степень</span>
     </button>
     <button class="mode-btn" id="mode-all">
-      <span class="sym">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-             stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="4"/>
-          <circle cx="8.5" cy="8.5" r="1.2" fill="#fff" stroke="none"/>
-          <circle cx="15.5" cy="8.5" r="1.2" fill="#fff" stroke="none"/>
-          <circle cx="12" cy="12" r="1.2" fill="#fff" stroke="none"/>
-          <circle cx="8.5" cy="15.5" r="1.2" fill="#fff" stroke="none"/>
-          <circle cx="15.5" cy="15.5" r="1.2" fill="#fff" stroke="none"/>
-        </svg>
-      </span>
+      <span class="sym">🎲</span>
       <span class="label">Всё вместе</span>
+    </button>
+    <button class="mode-btn" id="mode-timed">
+      <span class="sym">⏱️</span>
+      <span class="label">Игра на время (60 сек)</span>
+    </button>
+    <button class="mode-btn" id="mode-rating">
+      <span class="sym">🏆</span>
+      <span class="label">Рейтинг</span>
     </button>
 
     <p class="author">
@@ -252,13 +416,16 @@
     </p>
   </div>
 
+  <!-- ===== Игра ===== -->
   <div id="game">
     <div class="topbar">
       <span>Счёт: <b id="score">0</b></span>
       <span class="hearts" id="hearts">❤️❤️❤️❤️❤️</span>
       <span class="rank" id="rank">🌱 Новичок</span>
+      <button class="name-btn unset" id="nameBtn">👤 Имя</button>
     </div>
 
+    <div class="timer" id="timer"></div>
     <div class="task" id="task">…</div>
     <div class="answers" id="answers"></div>
     <div class="msg" id="msg"></div>
@@ -270,7 +437,53 @@
     </div>
   </div>
 
-<script>
+  <!-- ===== Рейтинг ===== -->
+  <div id="rating">
+    <h2>🏆 Рейтинг</h2>
+    <div class="rating-tabs">
+      <button class="rating-tab active" id="tabClassic">Общий</button>
+      <button class="rating-tab" id="tabTimed">На время</button>
+    </div>
+    <div class="rating-list" id="ratingList"></div>
+    <button class="link secondary" id="backFromRating" style="margin-top:24px;">← Назад в меню</button>
+  </div>
+
+  <!-- ===== Модалка имени ===== -->
+  <div class="modal-overlay" id="nameModal">
+    <div class="modal-box">
+      <h3>Как тебя зовут?</h3>
+      <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
+      <div class="row">
+        <button class="save" id="saveName">Сохранить</button>
+        <button class="cancel" id="cancelName">Отмена</button>
+      </div>
+      <button class="clear" id="clearName">Стереть имя</button>
+    </div>
+  </div>
+
+<script type="module">
+  // ==========================================
+  // 1. ИНИЦИАЛИЗАЦИЯ FIREBASE (Твои ключи)
+  // ==========================================
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, push, onValue, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0RMzcWPaGs2z6KA0qYnYReEzOxapDoiM",
+    authDomain: "math-tir-rating.firebaseapp.com",
+    databaseURL: "https://math-tir-rating-default-rtdb.firebaseio.com",
+    projectId: "math-tir-rating",
+    storageBucket: "math-tir-rating.firebasestorage.app",
+    messagingSenderId: "560830825752",
+    appId: "1:560830825752:web:a2c5df02f1917e40a24a6d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // ==========================================
+  // 2. ПЕРЕМЕННЫЕ И ЛОГИКА ИГРЫ
+  // ==========================================
   const MAX_LIVES = 5;
   let score = 0, lives = MAX_LIVES, answer = 0, locked = false;
   let currentMode = 'all';
@@ -279,6 +492,14 @@
   let recentTasks = [];
   const RECENT_LIMIT = 8;
   let wrongQueue = [];
+  
+  let isTimedMode = false;
+  let timeLeft = 60;
+  let timerInterval = null;
+
+  let playerName = localStorage.getItem('mathTirName') || '';
+  let bestClassic = parseInt(localStorage.getItem('mathTirBestClassic') || '0', 10);
+  let bestTimed = parseInt(localStorage.getItem('mathTirBestTimed') || '0', 10);
 
   const $ = id => document.getElementById(id);
   const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
@@ -341,11 +562,8 @@
   const SUP = { 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸' };
   const EXP = { '³': 3, '⁴': 4, '⁵': 5, '⁶': 6, '⁷': 7, '⁸': 8 };
 
-  // ===== Выбор операции с весами =====
   function pickOp() {
-    if (currentMode === 'addsub') {
-      return pick1(['+', '−']);
-    }
+    if (currentMode === 'addsub') return pick1(['+', '−']);
     if (currentMode === 'muldiv') {
       const ops = ['×', '÷', '^'];
       const w = [2, 2, 1];
@@ -361,12 +579,7 @@
     let a, b, ans, display;
 
     if (op === '+' || op === '−') {
-      const signCombos = [
-        [1, 1],
-        [1, -1],
-        [-1, 1],
-        [-1, -1],
-      ];
+      const signCombos = [[1,1],[1,-1],[-1,1],[-1,-1]];
       const weights = [1, 3, 3, 3];
       const idx = weightedPick(weights);
       const [sa, sb] = signCombos[idx];
@@ -383,18 +596,14 @@
         else       display = `${fmt(a)} − ${b} = ?`;
       }
     } else if (op === '×') {
-      const signCombos = [
-        [1, 1], [1, -1], [-1, 1], [-1, -1],
-      ];
+      const signCombos = [[1,1],[1,-1],[-1,1],[-1,-1]];
       const [sa, sb] = pick1(signCombos);
       a = sa * rnd(2, 12);
       b = sb * rnd(2, 12);
       ans = a * b;
       display = `${fmt(a)} × ${wrap(b)} = ?`;
     } else if (op === '÷') {
-      const signCombos = [
-        [1, 1], [1, -1], [-1, 1], [-1, -1],
-      ];
+      const signCombos = [[1,1],[1,-1],[-1,1],[-1,-1]];
       const [sb, sq] = pick1(signCombos);
       const bDiv = sb * rnd(2, 12);
       const q = sq * rnd(2, 12);
@@ -402,11 +611,6 @@
       ans = q;
       display = `${fmt(aDiv)} ÷ ${wrap(bDiv)} = ?`;
     } else {
-      // ВОЗВЕДЕНИЕ В СТЕПЕНЬ
-      // ³ — основание до ±6
-      // ⁴ — основание до ±3
-      // ⁵ — основание до ±2
-      // ⁶,⁷,⁸ — только основание ±2
       b = pick1([3, 4, 5, 6, 7, 8]);
       if (b === 3) {
         const bases3 = [];
@@ -422,12 +626,10 @@
       ans = Math.pow(a, b);
       display = `${wrap(a)}${SUP[b]} = ?`;
     }
-    // сохраняем a и b в задаче — пригодятся для умных дистракторов
     return { display, answer: ans, key: display, op, a, b };
   }
 
   function restoreTask(key) {
-    // степень: (−2)⁷ = ?
     const mPow = key.match(/^\(?(−?\d+)\)?([³⁴⁵⁶⁷⁸])\s=/);
     if (mPow) {
       const a = parseInt(mPow[1].replace('−', '-'), 10);
@@ -448,7 +650,6 @@
     return { display: key, answer: ans, key, op, a, b };
   }
 
-  // ===== Умные дистракторы: типичные ученические ошибки =====
   function makeDistractors(task) {
     const { op, answer, a, b } = task;
     const set = new Set();
@@ -457,43 +658,22 @@
     };
 
     if (op === '+' || op === '−') {
-      add(-answer);           // потеряли знак
-      add(Math.abs(answer));  // потеряли минус
-      add(answer + 10);       // ошибка в разряде
-      add(answer - 10);
-      add(answer + 1);
-      add(answer - 1);
-      // перепутали знак второго числа
-      add(a + b);             // как будто всегда «+»
-      add(a - b);             // как будто всегда «−»
+      add(-answer); add(Math.abs(answer)); add(answer + 10); add(answer - 10);
+      add(answer + 1); add(answer - 1); add(a + b); add(a - b);
     } else if (op === '×' || op === '÷') {
-      add(-answer);           // потеряли знак
-      add(Math.abs(answer));  // потеряли минус
+      add(-answer); add(Math.abs(answer));
       if (op === '×') {
-        add(answer + a);      // ошибка на один множитель
-        add(answer - a);
-        add(answer + b);
-        add(answer - b);
-        add(a + b);           // перепутали × и +
+        add(answer + a); add(answer - a); add(answer + b); add(answer - b); add(a + b);
       } else {
-        // для деления: a — делимое, b — делитель, answer — частное
-        add(answer + 1);
-        add(answer - 1);
-        add(answer + 2);
-        add(answer - 2);
-        add(a - b);           // перепутали ÷ и −
+        add(answer + 1); add(answer - 1); add(answer + 2); add(answer - 2); add(a - b);
       }
     } else if (op === '^') {
-      add(a * b);                          // САМАЯ частая: степень как умножение
-      add(-answer);                        // потеряли знак
-      add(Math.abs(answer));               // потеряли минус
-      add(Math.pow(a, b - 1));             // соседняя степень
+      add(a * b); add(-answer); add(Math.abs(answer));
+      add(Math.pow(a, b - 1));
       if (b < 8) add(Math.pow(a, b + 1));
-      add(a + b);                          // перепутали ^ и +
-      add(a * a);                          // возвели только в квадрат
+      add(a + b); add(a * a);
     }
 
-    // добираем соседними значениями, если чего-то не хватило
     const scale = Math.max(2, Math.round(Math.abs(answer) * 0.2));
     let guard = 0;
     while (set.size < 8 && guard < 50) {
@@ -526,7 +706,6 @@
     $('task').textContent = task.display;
     $('task').classList.remove('hit');
 
-    // умные дистракторы → перемешать → взять 3
     const distractors = makeDistractors(task);
     for (let i = distractors.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -573,17 +752,19 @@
 
       const newRank = rankFor(score);
 
-      if (newRank.at > prevRank.at) {
+      if (newRank.at > prevRank.at && !isTimedMode) {
         $('rank').textContent = `${newRank.emoji} ${newRank.name}`;
         $('rank').classList.remove('pulse');
         void $('rank').offsetWidth;
         $('rank').classList.add('pulse');
         confetti(40);
       }
-      setTimeout(makeTask, 650);
+      setTimeout(makeTask, 300);
     } else {
-      lives--;
-      updateHearts();
+      if (!isTimedMode) {
+        lives--;
+        updateHearts();
+      }
       btn.classList.add('wrong');
       document.querySelectorAll('.ball').forEach(b => {
         if (parseInt(b.dataset.value, 10) === answer) {
@@ -602,23 +783,148 @@
         wrongQueue.push(currentDisplayKey);
         if (wrongQueue.length > 10) wrongQueue.shift();
       }
-      if (lives <= 0) setTimeout(gameOver, 900);
-      else setTimeout(makeTask, 1200);
+      
+      if (!isTimedMode && lives <= 0) setTimeout(gameOver, 900);
+      else setTimeout(makeTask, isTimedMode ? 600 : 1200);
     }
   }
 
+  // ==========================================
+  // 3. FIREBASE: ОТПРАВКА И ЗАГРУЗКА РЕЙТИНГА
+  // ==========================================
+  function saveScore(mode, finalScore) {
+    if (!playerName) return;
+    push(ref(db, `scores/${mode}`), {
+      name: playerName,
+      score: finalScore,
+      timestamp: Date.now()
+    }).catch(e => console.error(e));
+  }
+
+  function loadLeaderboard(mode, containerId) {
+    const container = $(containerId);
+    container.innerHTML = '<div class="rating-empty">Загрузка...</div>';
+    
+    // Берем последние 100 записей, чтобы найти максимумы
+    const q = query(ref(db, `scores/${mode}`), limitToLast(100));
+    onValue(q, (snapshot) => {
+      const data = snapshot.val();
+      container.innerHTML = '';
+      if (!data) {
+        container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
+        return;
+      }
+      
+      const bestScores = {};
+      Object.values(data).forEach(item => {
+        if (!bestScores[item.name] || item.score > bestScores[item.name]) {
+          bestScores[item.name] = item.score;
+        }
+      });
+      
+      const sorted = Object.keys(bestScores)
+        .map(name => ({ name, score: bestScores[name] }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+        
+      if (sorted.length === 0) {
+        container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
+        return;
+      }
+      
+      sorted.forEach((item, index) => {
+        const row = document.createElement('div');
+        row.className = 'rating-row';
+        row.innerHTML = `
+          <span class="pos">${index + 1}</span>
+          <span class="nm">${item.name}</span>
+          <span class="sc">${item.score}</span>
+        `;
+        container.appendChild(row);
+      });
+    });
+  }
+
+  // ==========================================
+  // 4. УПРАВЛЕНИЕ ИГРОЙ И ИНТЕРФЕЙСОМ
+  // ==========================================
   function gameOver() {
-    $('task').textContent = '🏁 Жизни кончились!';
+    if (timerInterval) clearInterval(timerInterval);
+    $('timer').textContent = '';
+    $('task').textContent = isTimedMode ? '⏱️ Время вышло!' : '🏁 Жизни кончились!';
     $('answers').innerHTML = '';
+    
     const r = rankFor(score);
-    $('msg').textContent = `Счёт: ${score} · ${r.emoji} ${r.name}`;
+    let bestType = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
+    let best = isTimedMode ? bestTimed : bestClassic;
+    let bestMsg = '';
+    
+    if (score > best) {
+      localStorage.setItem(bestType, score);
+      if (isTimedMode) bestTimed = score; else bestClassic = score;
+      bestMsg = ' 🎉 Новый рекорд!';
+      confetti(20);
+    }
+    
+    $('msg').textContent = `Счёт: ${score} · ${r.emoji} ${r.name}${bestMsg}`;
     $('msg').style.color = '#fff';
     $('msg').classList.add('show');
     $('continue').classList.add('visible');
+    
+    // Отправляем в Firebase
+    if (playerName) {
+      saveScore(isTimedMode ? 'timed' : 'classic', score);
+    }
   }
+
+  function updateNameUI() {
+    const btn = $('nameBtn');
+    if (playerName) {
+      btn.textContent = `👤 ${playerName}`;
+      btn.classList.remove('unset');
+    } else {
+      btn.textContent = '👤 Имя';
+      btn.classList.add('unset');
+    }
+  }
+
+  $('nameBtn').onclick = () => {
+    $('nameInput').value = playerName;
+    $('nameModal').classList.add('visible');
+    $('nameInput').focus();
+  };
+
+  $('saveName').onclick = () => {
+    const val = $('nameInput').value.trim();
+    if (val) {
+      playerName = val;
+      localStorage.setItem('mathTirName', val);
+      updateNameUI();
+    }
+    $('nameModal').classList.remove('visible');
+  };
+
+  $('cancelName').onclick = () => {
+    $('nameModal').classList.remove('visible');
+  };
+
+  $('clearName').onclick = () => {
+    playerName = '';
+    localStorage.removeItem('mathTirName');
+    updateNameUI();
+    $('nameModal').classList.remove('visible');
+  };
+
+  $('nameInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') $('saveName').click();
+  });
 
   function startGame(mode) {
     currentMode = mode;
+    isTimedMode = (mode === 'timed');
+    
+    if (isTimedMode) currentMode = 'all'; // Режим на время - это всегда всё вместе
+
     score = 0; lives = MAX_LIVES;
     recentTasks = []; wrongQueue = [];
     $('score').textContent = 0;
@@ -626,37 +932,81 @@
     $('rank').textContent = `${RANKS[0].emoji} ${RANKS[0].name}`;
     $('rank').classList.remove('pulse');
     $('continue').classList.remove('visible');
+    
     $('menu').classList.add('hidden');
+    $('rating').classList.remove('visible');
     $('game').classList.add('visible');
+    
+    if (isTimedMode) {
+      $('hearts').style.visibility = 'hidden';
+      $('rank').style.visibility = 'hidden';
+      timeLeft = 60;
+      $('timer').textContent = `⏱️ ${timeLeft} сек`;
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        $('timer').textContent = `⏱️ ${timeLeft} сек`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          gameOver();
+        }
+      }, 1000);
+    } else {
+      $('hearts').style.visibility = 'visible';
+      $('rank').style.visibility = 'visible';
+      $('timer').textContent = '';
+      if (timerInterval) clearInterval(timerInterval);
+    }
+    
     makeTask();
   }
 
   $('mode-addsub').onclick = () => startGame('addsub');
   $('mode-muldiv').onclick = () => startGame('muldiv');
   $('mode-all').onclick    = () => startGame('all');
+  $('mode-timed').onclick  = () => startGame('timed');
+
+  $('mode-rating').onclick = () => {
+    $('menu').classList.add('hidden');
+    $('rating').classList.add('visible');
+    $('tabClassic').classList.add('active');
+    $('tabTimed').classList.remove('active');
+    loadLeaderboard('classic', 'ratingList');
+  };
+
+  $('tabClassic').onclick = () => {
+    $('tabClassic').classList.add('active');
+    $('tabTimed').classList.remove('active');
+    loadLeaderboard('classic', 'ratingList');
+  };
+
+  $('tabTimed').onclick = () => {
+    $('tabTimed').classList.add('active');
+    $('tabClassic').classList.remove('active');
+    loadLeaderboard('timed', 'ratingList');
+  };
+
+  $('backFromRating').onclick = () => {
+    $('rating').classList.remove('visible');
+    $('menu').classList.remove('hidden');
+  };
 
   $('continue').onclick = () => {
-    lives = MAX_LIVES; updateHearts();
-    $('continue').classList.remove('visible');
-    $('msg').classList.remove('show');
-    makeTask();
+    startGame(currentMode);
   };
 
   $('restart').onclick = () => {
-    score = 0; lives = MAX_LIVES;
-    recentTasks = []; wrongQueue = [];
-    $('score').textContent = 0; updateHearts();
-    $('rank').textContent = `${RANKS[0].emoji} ${RANKS[0].name}`;
-    $('rank').classList.remove('pulse');
-    $('continue').classList.remove('visible');
-    $('msg').classList.remove('show');
-    makeTask();
+    startGame(currentMode);
   };
 
   $('back').onclick = () => {
+    if (timerInterval) clearInterval(timerInterval);
     $('game').classList.remove('visible');
     $('menu').classList.remove('hidden');
   };
+
+  // Инициализация при загрузке
+  updateNameUI();
 </script>
 </body>
 </html>
