@@ -22,7 +22,7 @@
     flex-wrap: nowrap;
     width: 100%; max-width: 420px;
     font-size: 0.9rem; opacity: 0.9;
-    margin-bottom: 22px;
+    margin-bottom: 8px;
     padding-top: 8px;
     min-height: 2rem;
     gap: 8px;
@@ -44,6 +44,47 @@
     100% { transform: scale(1); }
   }
   .hearts { font-size: 1.1rem; letter-spacing: 2px; }
+
+  /* Кнопка сохранения */
+  .save-record-row {
+    width: 100%;
+    max-width: 420px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+    height: 32px;
+  }
+  .btn-save-record {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #6ee7b7;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.1s;
+  }
+  .btn-save-record.show {
+    opacity: 1;
+    pointer-events: auto;
+    animation: pulseGreen 1.5s infinite;
+  }
+  .btn-save-record:active { transform: scale(0.95); }
+  .btn-save-record.saved {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.5);
+    animation: none;
+    pointer-events: none;
+  }
+  @keyframes pulseGreen {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  }
 
   /* ===== Меню ===== */
   #menu {
@@ -371,7 +412,7 @@
 
   @media (max-width: 360px) {
     body { padding: 18px 12px; }
-    .topbar { font-size: 0.8rem; gap: 6px; margin-bottom: 16px; }
+    .topbar { font-size: 0.8rem; gap: 6px; margin-bottom: 8px; }
     .hearts { font-size: 0.95rem; letter-spacing: 1px; }
     .task { font-size: 2.7rem; margin: 8px 0 24px; }
     .ball { font-size: 1.6rem; padding: 22px 0; }
@@ -379,6 +420,9 @@
     #menu .author { font-size: 0.7rem; }
   }
 </style>
+<!-- Подключаем Firebase через CDN (глобальный объект firebase) -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
@@ -428,6 +472,11 @@
       <span class="rank" id="rank">🌱 Новичок</span>
     </div>
 
+    <!-- Кнопка сохранения -->
+    <div class="save-record-row">
+      <button class="btn-save-record" id="saveRecordBtn">💾 Сохранить рекорд</button>
+    </div>
+
     <div class="timer" id="timer"></div>
     <div class="task" id="task">…</div>
     <div class="answers" id="answers"></div>
@@ -462,13 +511,10 @@
     </div>
   </div>
 
-<script type="module">
+<script>
   // ==========================================
   // 1. ИНИЦИАЛИЗАЦИЯ FIREBASE
   // ==========================================
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, push, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
   const firebaseConfig = {
     apiKey: "AIzaSyD0RMzcWPaGs2z6KA0qYnYReEzOxapDoiM",
     authDomain: "math-tir-rating.firebaseapp.com",
@@ -479,8 +525,8 @@
     appId: "1:560830825752:web:a2c5df02f1917e40a24a6d"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
   // ==========================================
   // 2. ПЕРЕМЕННЫЕ
@@ -497,6 +543,7 @@
   let isTimedMode = false;
   let timeLeft = 60;
   let timerInterval = null;
+  let hasSavedCurrentRecord = false;
 
   let playerName = localStorage.getItem('mathTirName') || '';
 
@@ -748,6 +795,8 @@
       $('msg').textContent = '✅ Верно!';
       $('msg').style.color = '#6ee7b7';
       $('msg').classList.add('show');
+      
+      checkShowSaveBtn();
 
       const newRank = rankFor(score);
       if (newRank.at > prevRank.at && !isTimedMode) {
@@ -793,66 +842,90 @@
   
   function saveScore(mode, finalScore) {
     if (!playerName) return;
-    push(ref(db, `scores/${mode}`), {
+    db.ref(`scores/${mode}`).push({
       name: playerName,
       score: finalScore,
       timestamp: Date.now()
     }).catch(e => console.error(e));
   }
 
-  function checkAndSaveRecord() {
-    if (score === 0 || !playerName) return;
-
+  function checkShowSaveBtn() {
+    if (score === 0 || !playerName || hasSavedCurrentRecord) {
+      $('saveRecordBtn').classList.remove('show');
+      return;
+    }
     const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
     const currentBest = parseInt(localStorage.getItem(recordKey) || '0', 10);
 
     if (score > currentBest) {
-      localStorage.setItem(recordKey, score);
-      saveScore(isTimedMode ? 'timed' : 'classic', score);
+      $('saveRecordBtn').classList.add('show');
+      $('saveRecordBtn').classList.remove('saved');
+      $('saveRecordBtn').textContent = '💾 Сохранить рекорд';
+    } else {
+      $('saveRecordBtn').classList.remove('show');
     }
   }
+
+  $('saveRecordBtn').onclick = () => {
+    if (score === 0 || !playerName) return;
+    const recordKey = isTimedMode ? 'mathTirBestTimed' : 'mathTirBestClassic';
+    const currentBest = parseInt(localStorage.getItem(recordKey) || '0', 10);
+    
+    if (score > currentBest) {
+      localStorage.setItem(recordKey, score);
+      saveScore(isTimedMode ? 'timed' : 'classic', score);
+      hasSavedCurrentRecord = true;
+      $('saveRecordBtn').classList.remove('show');
+      $('saveRecordBtn').classList.add('saved');
+      $('saveRecordBtn').textContent = '✅ Сохранено!';
+    }
+  };
 
   function loadLeaderboard(mode, containerId) {
     const container = $(containerId);
     container.innerHTML = '<div class="rating-empty">Загрузка...</div>';
     
-    const q = query(ref(db, `scores/${mode}`), limitToLast(100));
-    onValue(q, (snapshot) => {
-      const data = snapshot.val();
-      container.innerHTML = '';
-      if (!data) {
-        container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
-        return;
-      }
-      
-      const bestScores = {};
-      Object.values(data).forEach(item => {
-        if (!bestScores[item.name] || item.score > bestScores[item.name]) {
-          bestScores[item.name] = item.score;
+    db.ref(`scores/${mode}`).limitToLast(100).once('value')
+      .then((snapshot) => {
+        const data = snapshot.val();
+        container.innerHTML = '';
+        if (!data) {
+          container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
+          return;
         }
-      });
-      
-      const sorted = Object.keys(bestScores)
-        .map(name => ({ name, score: bestScores[name] }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10);
         
-      if (sorted.length === 0) {
-        container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
-        return;
-      }
-      
-      sorted.forEach((item, index) => {
-        const row = document.createElement('div');
-        row.className = 'rating-row';
-        row.innerHTML = `
-          <span class="pos">${index + 1}</span>
-          <span class="nm">${item.name}</span>
-          <span class="sc">${item.score}</span>
-        `;
-        container.appendChild(row);
+        const bestScores = {};
+        Object.values(data).forEach(item => {
+          if (!bestScores[item.name] || item.score > bestScores[item.name]) {
+            bestScores[item.name] = item.score;
+          }
+        });
+        
+        const sorted = Object.keys(bestScores)
+          .map(name => ({ name, score: bestScores[name] }))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 10);
+          
+        if (sorted.length === 0) {
+          container.innerHTML = '<div class="rating-empty">Пока нет результатов</div>';
+          return;
+        }
+        
+        sorted.forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = 'rating-row';
+          row.innerHTML = `
+            <span class="pos">${index + 1}</span>
+            <span class="nm">${item.name}</span>
+            <span class="sc">${item.score}</span>
+          `;
+          container.appendChild(row);
+        });
+      })
+      .catch(err => {
+        container.innerHTML = '<div class="rating-empty">Ошибка загрузки</div>';
+        console.error(err);
       });
-    });
   }
 
   // ==========================================
@@ -863,6 +936,7 @@
     $('timer').textContent = '';
     $('task').textContent = isTimedMode ? '⏱️ Время вышло!' : '🏁 Жизни кончились!';
     $('answers').innerHTML = '';
+    $('saveRecordBtn').classList.remove('show');
     
     const r = rankFor(score);
     
@@ -898,6 +972,7 @@
       localStorage.setItem('mathTirName', val);
       updateNameUI();
       $('nameModal').classList.remove('visible');
+      checkShowSaveBtn();
     } else {
       const inp = $('nameInput');
       inp.style.transform = 'translateX(5px)';
@@ -918,11 +993,14 @@
 
     score = 0; lives = MAX_LIVES;
     recentTasks = []; wrongQueue = [];
+    hasSavedCurrentRecord = false;
     $('score').textContent = 0;
     updateHearts();
     $('rank').textContent = `${RANKS[0].emoji} ${RANKS[0].name}`;
     $('rank').classList.remove('pulse');
     $('continue').classList.remove('visible');
+    $('saveRecordBtn').classList.remove('show');
+    $('saveRecordBtn').classList.remove('saved');
     
     $('menu').classList.add('hidden');
     $('rating').classList.remove('visible');
@@ -987,14 +1065,9 @@
   
   $('back').onclick = () => {
     if (timerInterval) clearInterval(timerInterval);
-    checkAndSaveRecord();
     $('game').classList.remove('visible');
     $('menu').classList.remove('hidden');
   };
-
-  window.addEventListener('beforeunload', () => {
-    checkAndSaveRecord();
-  });
 
   updateNameUI();
   if (!playerName) showNameModal();
