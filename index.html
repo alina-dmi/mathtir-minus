@@ -2,11 +2,25 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Математический тир: Отрицательные числа</title>
 <style>
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #1a1c2e; color: #f1f5f9; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 24px 16px; overflow-x: hidden; position: relative; }
+
+/* Используем 100dvh для правильной высоты на мобильных */
+body { 
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif; 
+  background: #1a1c2e; 
+  color: #f1f5f9; 
+  min-height: 100dvh; 
+  display: flex; 
+  justify-content: center; 
+  align-items: flex-start; 
+  padding: 24px 16px; 
+  padding-bottom: calc(24px + env(safe-area-inset-bottom)); /* Отступ для Safari */
+  overflow-x: hidden; 
+  position: relative; 
+}
 
 /* ===== ФОН ===== */
 .bg-glow { position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%); top: 10%; left: 50%; transform: translateX(-50%); z-index: 0; pointer-events: none; }
@@ -14,8 +28,8 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .symbol { position: absolute; color: rgba(255, 255, 255, 0.03); font-weight: 800; font-size: 8rem; line-height: 1; animation: floatUp 25s linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(20vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
 
-#app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; }
-.screen { display: none; flex-direction: column; width: 100%; }
+#app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; min-height: 100dvh; }
+.screen { display: none; flex-direction: column; width: 100%; flex: 1; }
 .screen.active { display: flex; }
 
 /* ===== МЕНЮ ===== */
@@ -57,10 +71,16 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 #mode-duel .mini-icon { background: linear-gradient(135deg, #e879f9, #d946ef); box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); }
 .mini-text { font-size: 0.8rem; font-weight: 700; color: #e2e8f0; text-align: center; line-height: 1.2; z-index: 1; }
 
-.author { margin-top: 30px; font-size: 0.75rem; font-weight: 400; color: #64748b; text-align: center; line-height: 1.4; }
+.author { margin-top: 30px; font-size: 0.75rem; font-weight: 400; color: #64748b; text-align: center; line-height: 1.4; padding-bottom: env(safe-area-inset-bottom); }
 .author b { font-weight: 600; color: #94a3b8; }
 
 /* ===== ИГРА ===== */
+.game-screen { 
+  display: flex; 
+  flex-direction: column; 
+  flex: 1; 
+  padding-bottom: env(safe-area-inset-bottom); /* Отступ для Safari */
+}
 .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
 .game-topbar .stat { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
 .game-topbar .stat + .stat::before { content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 1px; background: rgba(255,255,255,0.1); }
@@ -71,7 +91,6 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 
 .timer { font-size: 1.4rem; font-weight: 800; color: #fcd34d; margin-bottom: 12px; text-align: center; text-shadow: 0 0 15px rgba(252, 211, 77, 0.4); }
 
-/* Карточка с примером (адаптивный шрифт) */
 .task-container { 
   background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%); 
   border: 1px solid rgba(255,255,255,0.15); 
@@ -126,7 +145,14 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .btn-save-record:active { transform: scale(0.98); }
 .btn-save-record.saved { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); pointer-events: none; }
 
-.actions { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+/* Поднимаем кнопки выше и прижимаем к безопасной зоне */
+.actions { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  margin-top: auto; /* Прижимаем к низу */
+  padding-bottom: calc(20px + env(safe-area-inset-bottom)); /* Безопасный отступ */
+}
 .btn-main { padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: #e2e8f0; color: #1e293b; box-shadow: 0 4px 0 #94a3b8; opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
 .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .btn-main:active { transform: translateY(2px); box-shadow: 0 2px 0 #94a3b8; }
@@ -141,7 +167,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 .rating-tabs { display: flex; gap: 8px; width: 100%; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 12px; }
 .rating-tab { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 700; cursor: pointer; background: transparent; color: #94a3b8; transition: all 0.2s; }
 .rating-tab.active { background: #334155; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-.rating-list { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.rating-list { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; padding-bottom: env(safe-area-inset-bottom); }
 .rating-row { display: flex; align-items: center; padding: 14px 16px; background: rgba(255,255,255,0.05); border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
 .rating-row .pos { font-weight: 800; color: #a5b4fc; min-width: 2rem; }
 .rating-row .nm { flex: 1; text-align: left; margin-left: 8px; font-weight: 600; }
@@ -212,8 +238,26 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 
 .duel-timer { text-align: center; font-size: 1.5rem; font-weight: 800; color: #fcd34d; padding: 10px; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
 
-/* Нижняя панель дуэли */
-.duel-footer { display: flex; justify-content: center; padding: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
+/* Подняли панель с кнопкой выхода */
+.duel-footer { 
+  display: flex; 
+  justify-content: center; 
+  padding: 15px 15px calc(20px + env(safe-area-inset-bottom)); /* Безопасный отступ */
+  background: rgba(0,0,0,0.2); 
+  border-top: 1px solid rgba(255,255,255,0.05); 
+}
+.duel-footer .link {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+.duel-footer .link:active {
+  background: rgba(255,255,255,0.1);
+}
 
 @media (max-width: 800px) {
   .duel-name { font-size: 0.85rem; }
@@ -224,7 +268,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
 }
 
 /* Окно результатов дуэли */
-.result-popup { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; }
+.result-popup { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
 .result-popup.visible { display: flex; }
 .result-box { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
 .result-box h2 { font-size: 1.8rem; margin-bottom: 8px; color: #fcd34d; }
@@ -310,7 +354,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
       </p>
     </div>
 
-    <div id="screen-game" class="screen">
+    <div id="screen-game" class="screen game-screen">
       <div class="game-topbar">
         <div class="stat">
           <span class="stat-label">Счёт</span>
@@ -430,7 +474,7 @@ body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #
       </div>
     </div>
     <div class="duel-footer">
-      <button class="link" id="exitDuelBtn" style="color: rgba(255,255,255,0.4); font-size: 0.9rem;">← Покинуть гонку</button>
+      <button class="link" id="exitDuelBtn">← Покинуть гонку</button>
     </div>
   </div>
 
