@@ -17,7 +17,7 @@ body {
   justify-content: center; 
   align-items: flex-start; 
   padding: 24px 16px; 
-  padding-bottom: calc(24px + env(safe-area-inset-bottom)); /* Отступ для Safari */
+  padding-bottom: calc(24px + env(safe-area-inset-bottom)); 
   overflow-x: hidden; 
   position: relative; 
 }
@@ -28,11 +28,19 @@ body {
 .symbol { position: absolute; color: rgba(255, 255, 255, 0.03); font-weight: 800; font-size: 8rem; line-height: 1; animation: floatUp 25s linear infinite; }
 @keyframes floatUp { 0% { transform: translateY(20vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; } }
 
-#app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; min-height: 100dvh; }
-.screen { display: none; flex-direction: column; width: 100%; flex: 1; }
-.screen.active { display: flex; }
+#app { width: 100%; max-width: 420px; display: flex; flex-direction: column; z-index: 2; position: relative; }
+
+/* ЖЕСТКОЕ СКРЫТИЕ ЭКРАНОВ */
+.screen { display: none; }
+.screen.active { display: flex; flex-direction: column; width: 100%; flex: 1; }
 
 /* ===== МЕНЮ ===== */
+#screen-menu.active {
+  /* Меню не растягиваем на всю высоту, чтобы не было пустоты */
+  min-height: calc(100dvh - 48px); 
+  justify-content: space-between;
+}
+
 .menu-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .profile-chip { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.05); padding: 6px 14px 6px 6px; border-radius: 30px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.1); }
 .avatar { width: 28px; height: 28px; background: #c7d2fe; color: #1a1c2e; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
@@ -71,16 +79,15 @@ body {
 #mode-duel .mini-icon { background: linear-gradient(135deg, #e879f9, #d946ef); box-shadow: 0 0 15px rgba(217, 70, 239, 0.5); }
 .mini-text { font-size: 0.8rem; font-weight: 700; color: #e2e8f0; text-align: center; line-height: 1.2; z-index: 1; }
 
-.author { margin-top: 30px; font-size: 0.75rem; font-weight: 400; color: #64748b; text-align: center; line-height: 1.4; padding-bottom: env(safe-area-inset-bottom); }
+.author { margin-top: 30px; padding-bottom: 30px; font-size: 0.75rem; font-weight: 400; color: #64748b; text-align: center; line-height: 1.4; }
 .author b { font-weight: 600; color: #94a3b8; }
 
 /* ===== ИГРА ===== */
-.game-screen { 
-  display: flex; 
-  flex-direction: column; 
-  flex: 1; 
-  padding-bottom: env(safe-area-inset-bottom); /* Отступ для Safari */
+#screen-game.active {
+  justify-content: flex-start;
+  min-height: calc(100dvh - 48px);
 }
+
 .game-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; background: rgba(255,255,255,0.03); padding: 14px 16px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
 .game-topbar .stat { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; }
 .game-topbar .stat + .stat::before { content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 1px; background: rgba(255,255,255,0.1); }
@@ -145,13 +152,12 @@ body {
 .btn-save-record:active { transform: scale(0.98); }
 .btn-save-record.saved { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.5); pointer-events: none; }
 
-/* Поднимаем кнопки выше и прижимаем к безопасной зоне */
 .actions { 
   display: flex; 
   flex-direction: column; 
   gap: 10px; 
-  margin-top: auto; /* Прижимаем к низу */
-  padding-bottom: calc(20px + env(safe-area-inset-bottom)); /* Безопасный отступ */
+  margin-top: auto; 
+  padding-bottom: calc(20px + env(safe-area-inset-bottom)); 
 }
 .btn-main { padding: 14px; font-size: 1rem; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; background: #e2e8f0; color: #1e293b; box-shadow: 0 4px 0 #94a3b8; opacity: 0; transform: translateY(6px); pointer-events: none; transition: opacity 0.25s, transform 0.25s; }
 .btn-main.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
@@ -159,6 +165,7 @@ body {
 .link { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 0.85rem; cursor: pointer; text-decoration: underline; padding: 8px; }
 
 /* ===== РЕЙТИНГ ===== */
+#screen-rating.active { justify-content: flex-start; min-height: calc(100dvh - 48px); }
 .rating-header { display: flex; align-items: center; margin-bottom: 20px; }
 .back-btn { background: rgba(255,255,255,0.1); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-right: 12px; }
 .rating-title { font-size: 1.4rem; font-weight: 800; }
@@ -238,11 +245,10 @@ body {
 
 .duel-timer { text-align: center; font-size: 1.5rem; font-weight: 800; color: #fcd34d; padding: 10px; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
 
-/* Подняли панель с кнопкой выхода */
 .duel-footer { 
   display: flex; 
   justify-content: center; 
-  padding: 15px 15px calc(20px + env(safe-area-inset-bottom)); /* Безопасный отступ */
+  padding: 15px 15px calc(20px + env(safe-area-inset-bottom)); 
   background: rgba(0,0,0,0.2); 
   border-top: 1px solid rgba(255,255,255,0.05); 
 }
@@ -297,6 +303,7 @@ body {
   </div>
 
   <div id="app">
+    <!-- ЭКРАН МЕНЮ -->
     <div id="screen-menu" class="screen active">
       <div class="menu-topbar">
         <div class="profile-chip" id="editNameBtn">
@@ -354,7 +361,8 @@ body {
       </p>
     </div>
 
-    <div id="screen-game" class="screen game-screen">
+    <!-- ЭКРАН ИГРЫ -->
+    <div id="screen-game" class="screen">
       <div class="game-topbar">
         <div class="stat">
           <span class="stat-label">Счёт</span>
@@ -384,6 +392,7 @@ body {
       </div>
     </div>
 
+    <!-- ЭКРАН РЕЙТИНГА -->
     <div id="screen-rating" class="screen">
       <div class="rating-header">
         <button class="back-btn" id="backFromRating">
@@ -413,6 +422,7 @@ body {
       <div class="rating-list" id="ratingList"></div>
     </div>
 
+    <!-- МОДАЛКА ПРОФИЛЯ -->
     <div class="modal-overlay" id="nameModal">
       <div class="modal-box">
         <h3>Твой профиль</h3>
@@ -438,7 +448,7 @@ body {
       </div>
     </div>
 
-    <!-- МОДАЛКА ДЛЯ ВВОДА ИМЕН В ДУЭЛИ -->
+    <!-- МОДАЛКА ВВОДА ИМЕН ДЛЯ ДУЭЛИ -->
     <div class="modal-overlay" id="duelSetupModal">
       <div class="duel-setup-box">
         <h3>Гонка на двоих</h3>
@@ -449,6 +459,7 @@ body {
     </div>
   </div>
 
+  <!-- ЭКРАН ДУЭЛИ -->
   <div id="screen-duel">
     <div class="duel-timer" id="duelTimer">60</div>
     <div class="duel-play-area">
@@ -478,6 +489,7 @@ body {
     </div>
   </div>
 
+  <!-- ОКНО РЕЗУЛЬТАТОВ ДУЭЛИ -->
   <div class="result-popup" id="duelResultPopup">
     <div class="result-box">
       <h2 id="duelResultTitle">🏁 Время вышло!</h2>
