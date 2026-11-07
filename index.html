@@ -98,7 +98,13 @@ body {
 .game-topbar .stat + .stat::before { content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 1px; background: rgba(255,255,255,0.1); }
 .game-topbar .stat-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600; }
 .game-topbar .stat-value { font-size: 1.4rem; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-.game-topbar .hearts { font-size: 1.1rem; letter-spacing: 2px; }
+
+/* ЖИЗНИ (теперь в одну строку) */
+.game-topbar .hearts { 
+  font-size: 0.95rem; 
+  letter-spacing: 1px; 
+  white-space: nowrap; 
+}
 .game-topbar .rank { font-size: 0.85rem; color: #a5b4fc; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
 
 .timer { font-size: 1.5rem; font-weight: 800; color: #fcd34d; margin-bottom: 16px; text-align: center; text-shadow: 0 0 15px rgba(252, 211, 77, 0.4); flex-shrink: 0; }
