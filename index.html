@@ -98,13 +98,7 @@ body {
 .game-topbar .stat + .stat::before { content: ''; position: absolute; left: 0; top: 15%; bottom: 15%; width: 1px; background: rgba(255,255,255,0.1); }
 .game-topbar .stat-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; font-weight: 600; }
 .game-topbar .stat-value { font-size: 1.4rem; font-weight: 800; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
-
-/* ЖИЗНИ (теперь в одну строку) */
-.game-topbar .hearts { 
-  font-size: 0.95rem; 
-  letter-spacing: 1px; 
-  white-space: nowrap; 
-}
+.game-topbar .hearts { font-size: 0.95rem; letter-spacing: 1px; white-space: nowrap; }
 .game-topbar .rank { font-size: 0.85rem; color: #a5b4fc; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100px; }
 
 .timer { font-size: 1.5rem; font-weight: 800; color: #fcd34d; margin-bottom: 16px; text-align: center; text-shadow: 0 0 15px rgba(252, 211, 77, 0.4); flex-shrink: 0; }
@@ -175,9 +169,7 @@ body {
 .modal-box h3 { margin: 0 0 16px; font-size: 1.3rem; color: #fff; }
 
 .name-input-wrapper { background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 0; margin-bottom: 16px; transition: border-color 0.2s, background 0.2s; cursor: pointer; }
-.name-input-wrapper.active { border-color: #a5b4fc; background: rgba(165,180,252,0.1); cursor: text; }
 .name-input-wrapper input { width: 100%; border: none; background: transparent; color: #fff; font-size: 1.1rem; padding: 16px; outline: none; text-align: center; }
-.name-input-wrapper input[readonly] { cursor: pointer; opacity: 0.9; }
 
 .personal-stats { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 16px; margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px; }
 .p-stat { display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; }
@@ -437,7 +429,7 @@ body {
         </div>
 
         <div class="name-input-wrapper" id="nameWrapper">
-          <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя" readonly>
+          <input type="text" id="nameInput" maxlength="15" placeholder="Твоё имя">
         </div>
         
         <div class="difficulty-title">Уровень сложности</div>
@@ -951,10 +943,7 @@ body {
   // ===== МОДАЛКА ПРОФИЛЯ =====
   $('editNameBtn').onclick = () => {
     $('nameInput').value = playerName;
-    $('nameInput').readOnly = true;
-    $('nameWrapper').classList.remove('active');
-    if (document.activeElement) document.activeElement.blur();
-
+    
     $('pStatBestClassic').textContent = localStorage.getItem('mathTirBestClassic') || '0';
     $('pStatBestTimed').textContent = localStorage.getItem('mathTirBestTimed') || '0';
     $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
@@ -964,14 +953,11 @@ body {
     });
 
     $('nameModal').classList.add('visible');
-  };
-
-  $('nameWrapper').onclick = () => {
-    if ($('nameInput').readOnly) {
-      $('nameInput').readOnly = false;
-      $('nameWrapper').classList.add('active');
+    
+    // СРАЗУ СТАВИМ ФОКУС (клавиатура вылезает сразу)
+    setTimeout(() => {
       $('nameInput').focus();
-    }
+    }, 100);
   };
 
   document.querySelectorAll('.diff-btn').forEach(btn => {
@@ -1293,7 +1279,11 @@ body {
     $('pStatTotal').textContent = localStorage.getItem('mathTirTotal') || '0';
     
     $('nameModal').classList.add('visible');
-    $('nameInput').readOnly = true;
+    
+    // Фокус при первом запуске
+    setTimeout(() => {
+      $('nameInput').focus();
+    }, 100);
   }
 </script>
 </body>
